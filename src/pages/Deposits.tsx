@@ -1,9 +1,10 @@
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { DataTable, StatusBadge, Column } from "@/components/admin/DataTable";
+import { DataTable, StatusBadge, Column, TransactionCard } from "@/components/admin/DataTable";
 import { MiniStat } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
-import { Eye, Clock, CheckCircle, XCircle, TrendingUp, Copy } from "lucide-react";
+import { Eye, Clock, CheckCircle, XCircle, TrendingUp, Copy, Check } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface Deposit {
   id: string;
@@ -26,20 +27,42 @@ const deposits: Deposit[] = [
   { id: "DP007", user: "জাকির হোসেন", phone: "01312345678", method: "Nagad", transactionId: "TRX890123", amount: "৳7,500", status: "pending", date: "2026-01-19" },
 ];
 
-const copyToClipboard = (text: string) => {
-  navigator.clipboard.writeText(text);
-  toast({ title: "Copied!", description: "Transaction ID copied to clipboard." });
-};
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    toast({ title: "✅ Copied!", description: "Transaction ID copied to clipboard." });
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Button 
+      size="icon" 
+      variant="ghost" 
+      className="h-7 w-7 rounded-md"
+      onClick={handleCopy}
+    >
+      {copied ? <Check className="w-3.5 h-3.5 text-success" /> : <Copy className="w-3.5 h-3.5" />}
+    </Button>
+  );
+}
 
 const columns: Column<Deposit>[] = [
-  { key: "id", label: "ID", className: "font-mono" },
+  { key: "id", label: "ID", className: "font-mono text-sm" },
   { 
     key: "user", 
     label: "User",
     render: (value, row) => (
-      <div>
-        <p className="font-medium">{String(value)}</p>
-        <p className="text-xs text-muted-foreground">{row.phone}</p>
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl gradient-success flex items-center justify-center text-primary-foreground font-bold shrink-0">
+          {String(value).charAt(0)}
+        </div>
+        <div>
+          <p className="font-semibold text-foreground">{String(value)}</p>
+          <p className="text-xs text-muted-foreground">{row.phone}</p>
+        </div>
       </div>
     ),
   },
@@ -47,7 +70,7 @@ const columns: Column<Deposit>[] = [
     key: "method", 
     label: "Method",
     render: (value) => (
-      <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-success/10 text-success text-xs font-medium">
+      <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-success/10 text-success font-medium text-sm">
         {String(value)}
       </span>
     ),
@@ -56,35 +79,35 @@ const columns: Column<Deposit>[] = [
     key: "transactionId", 
     label: "Transaction ID",
     render: (value) => (
-      <div className="flex items-center gap-2">
-        <code className="text-xs bg-muted px-2 py-1 rounded font-mono">{String(value)}</code>
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="h-6 w-6"
-          onClick={() => copyToClipboard(String(value))}
-        >
-          <Copy className="w-3 h-3" />
-        </Button>
+      <div className="flex items-center gap-1.5">
+        <code className="text-xs bg-muted px-2.5 py-1.5 rounded-lg font-mono font-medium">{String(value)}</code>
+        <CopyButton text={String(value)} />
       </div>
     ),
+    hideOnMobile: true,
   },
   { 
     key: "amount", 
     label: "Amount",
-    render: (value) => <span className="font-bold text-success">{String(value)}</span>,
+    render: (value) => (
+      <span className="text-lg font-bold text-success">+{String(value)}</span>
+    ),
   },
   {
     key: "status",
     label: "Status",
     render: (value) => <StatusBadge status={value as Deposit["status"]} />,
   },
-  { key: "date", label: "Date" },
+  { 
+    key: "date", 
+    label: "Date",
+    hideOnMobile: true,
+  },
   {
     key: "actions",
     label: "Actions",
     render: () => (
-      <Button size="icon" variant="ghost" className="h-8 w-8">
+      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-lg">
         <Eye className="w-4 h-4" />
       </Button>
     ),
@@ -104,11 +127,37 @@ const methodFilters = [
 ];
 
 const Deposits = () => {
+  const renderMobileCard = (row: Deposit, index: number) => (
+    <TransactionCard
+      key={row.id}
+      id={row.id}
+      user={row.user}
+      phone={row.phone}
+      method={row.method}
+      amount={row.amount}
+      status={row.status}
+      date={row.date}
+      type="deposit"
+      transactionId={row.transactionId}
+      index={index}
+      actions={
+        <Button 
+          size="sm"
+          variant="outline"
+          className="flex-1 h-10 gap-2 rounded-xl"
+        >
+          <Eye className="w-4 h-4" />
+          View Details
+        </Button>
+      }
+    />
+  );
+
   return (
     <AdminLayout title="Deposits">
       <div className="space-y-6">
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
           <MiniStat title="Pending" value="8" icon={Clock} variant="warning" index={0} />
           <MiniStat title="Completed Today" value="32" icon={CheckCircle} variant="success" index={1} />
           <MiniStat title="Failed" value="2" icon={XCircle} variant="destructive" index={2} />
@@ -125,8 +174,9 @@ const Deposits = () => {
             { key: "status", label: "Status", options: statusFilters },
             { key: "method", label: "Method", options: methodFilters },
           ]}
-          onExport={() => toast({ title: "Export Started", description: "Your file will be downloaded shortly." })}
-          onRefresh={() => toast({ title: "Refreshed", description: "Data has been refreshed." })}
+          onExport={() => toast({ title: "📥 Export Started", description: "Your file will be downloaded shortly." })}
+          onRefresh={() => toast({ title: "🔄 Refreshed", description: "Data has been refreshed." })}
+          mobileCardRender={renderMobileCard}
         />
       </div>
     </AdminLayout>
