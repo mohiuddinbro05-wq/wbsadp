@@ -17,6 +17,20 @@ import Subscription from "./pages/Subscription";
 import PaymentMethods from "./pages/PaymentMethods";
 import NotFound from "./pages/NotFound";
 
+// Editor Pages
+import HeroEditor from "./pages/editor/HeroEditor";
+import AboutEditor from "./pages/editor/AboutEditor";
+import FeaturesEditor from "./pages/editor/FeaturesEditor";
+import TestimonialsEditor from "./pages/editor/TestimonialsEditor";
+import FAQEditor from "./pages/editor/FAQEditor";
+import ContactEditor from "./pages/editor/ContactEditor";
+
+// Team Management Pages
+import AdminUsers from "./pages/team/AdminUsers";
+import Agents from "./pages/team/Agents";
+import SupportTeam from "./pages/team/SupportTeam";
+import Moderators from "./pages/team/Moderators";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,6 +52,21 @@ const App = () => (
           <Route path="/videos" element={<Videos />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/payment-methods" element={<PaymentMethods />} />
+          
+          {/* Editor Routes */}
+          <Route path="/editor/hero" element={<HeroEditor />} />
+          <Route path="/editor/about" element={<AboutEditor />} />
+          <Route path="/editor/features" element={<FeaturesEditor />} />
+          <Route path="/editor/testimonials" element={<TestimonialsEditor />} />
+          <Route path="/editor/faq" element={<FAQEditor />} />
+          <Route path="/editor/contact" element={<ContactEditor />} />
+          
+          {/* Team Management Routes */}
+          <Route path="/team/admins" element={<AdminUsers />} />
+          <Route path="/team/agents" element={<Agents />} />
+          <Route path="/team/support" element={<SupportTeam />} />
+          <Route path="/team/moderators" element={<Moderators />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
