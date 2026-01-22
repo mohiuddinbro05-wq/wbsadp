@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { MiniStat } from "@/components/admin/StatCard";
@@ -415,7 +415,7 @@ interface PackageDialogProps {
 }
 
 function PackageDialog({ open, onClose, pkg, onSave }: PackageDialogProps) {
-  const [formData, setFormData] = useState<Partial<Package>>(pkg || {
+  const [formData, setFormData] = useState<Partial<Package>>({
     name: "",
     icon: "zap",
     price: "",
@@ -426,7 +426,41 @@ function PackageDialog({ open, onClose, pkg, onSave }: PackageDialogProps) {
     supportLevel: "basic",
     withdrawalFrequency: "weekly",
     isActive: true,
+    isPopular: false,
   });
+
+  // Update form data when pkg changes
+  useEffect(() => {
+    if (pkg) {
+      setFormData({
+        name: pkg.name,
+        icon: pkg.icon,
+        price: pkg.price,
+        priceType: pkg.priceType,
+        monthlyEarnings: pkg.monthlyEarnings,
+        videosPerDay: pkg.videosPerDay,
+        perVideoRate: pkg.perVideoRate,
+        supportLevel: pkg.supportLevel,
+        withdrawalFrequency: pkg.withdrawalFrequency,
+        isActive: pkg.isActive,
+        isPopular: pkg.isPopular,
+      });
+    } else {
+      setFormData({
+        name: "",
+        icon: "zap",
+        price: "",
+        priceType: "one-time",
+        monthlyEarnings: "",
+        videosPerDay: 5,
+        perVideoRate: "",
+        supportLevel: "basic",
+        withdrawalFrequency: "weekly",
+        isActive: true,
+        isPopular: false,
+      });
+    }
+  }, [pkg, open]);
 
   const handleSubmit = () => {
     if (!formData.name || !formData.price) {
