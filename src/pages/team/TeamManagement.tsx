@@ -498,76 +498,89 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
                 return (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-muted/50 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg bg-card hover:bg-muted/50 transition-colors gap-4"
                   >
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12">
+                    {/* User Info */}
+                    <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
                         <AvatarImage src={member.avatar} />
-                        <AvatarFallback className="bg-primary/10 text-primary">
+                        <AvatarFallback className="bg-primary/10 text-primary text-sm sm:text-base">
                           {member.name.split(" ").map((n) => n[0]).join("").toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-medium text-foreground">{member.name}</p>
-                          <Badge variant="secondary" className={roleInfo.color}>
+                          <p className="font-medium text-foreground text-sm sm:text-base truncate">{member.name}</p>
+                          <Badge variant="secondary" className={`${roleInfo.color} text-xs`}>
                             <RoleIcon className="w-3 h-3 mr-1" />
                             {roleInfo.label}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{member.email}</p>
-                        <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{member.email}</p>
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
                           <span className="text-xs text-muted-foreground">
                             {member.permissions.length} পারমিশন
                           </span>
-                          <span className="text-xs text-muted-foreground">•</span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-muted-foreground hidden sm:inline">•</span>
+                          <span className="text-xs text-muted-foreground hidden sm:inline">
                             যুক্ত: {member.createdAt}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge variant={member.status === "active" ? "default" : "secondary"}>
-                        {member.status === "active" ? "সক্রিয়" : "নিষ্ক্রিয়"}
-                      </Badge>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => openPermissionDialog(member)}
-                        className="hidden sm:flex"
-                      >
-                        <Key className="w-4 h-4 mr-2" />
-                        পারমিশন
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => openPermissionDialog(member)}>
-                            <Key className="w-4 h-4 mr-2" />
-                            পারমিশন
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleEdit(member)}>
-                            <Edit className="w-4 h-4 mr-2" />
-                            এডিট
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => toggleStatus(member.id)}>
-                            <UserCog className="w-4 h-4 mr-2" />
-                            {member.status === "active" ? "নিষ্ক্রিয় করুন" : "সক্রিয় করুন"}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleDelete(member.id)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            মুছুন
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 pl-12 sm:pl-0">
+                      <div className="flex items-center gap-2">
+                        <Badge 
+                          variant={member.status === "active" ? "default" : "secondary"}
+                          className="text-xs"
+                        >
+                          {member.status === "active" ? "সক্রিয়" : "নিষ্ক্রিয়"}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground sm:hidden">
+                          {member.createdAt}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => openPermissionDialog(member)}
+                          className="h-8 px-2 sm:px-3"
+                        >
+                          <Key className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">পারমিশন</span>
+                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => openPermissionDialog(member)}>
+                              <Key className="w-4 h-4 mr-2" />
+                              পারমিশন
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEdit(member)}>
+                              <Edit className="w-4 h-4 mr-2" />
+                              এডিট
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toggleStatus(member.id)}>
+                              <UserCog className="w-4 h-4 mr-2" />
+                              {member.status === "active" ? "নিষ্ক্রিয় করুন" : "সক্রিয় করুন"}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleDelete(member.id)}
+                              className="text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              মুছুন
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   </div>
                 );
