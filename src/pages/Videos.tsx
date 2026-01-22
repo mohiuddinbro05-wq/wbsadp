@@ -698,6 +698,14 @@ const VideosPage = () => {
           <Edit className="w-3.5 h-3.5" />
           Edit
         </Button>
+        <Button 
+          size="icon" 
+          variant="outline"
+          className="h-9 w-9 text-destructive border-destructive/30 hover:bg-destructive/10"
+          onClick={() => openActionDialog(video, "delete")}
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   );
