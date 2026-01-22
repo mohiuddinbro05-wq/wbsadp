@@ -16,6 +16,7 @@ import Videos from "./pages/Videos";
 import Subscription from "./pages/Subscription";
 import PaymentMethods from "./pages/PaymentMethods";
 import NotFound from "./pages/NotFound";
+import History from "./pages/History";
 
 // Editor Pages
 import HeroEditor from "./pages/editor/HeroEditor";
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/videos" element={<Videos />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/payment-methods" element={<PaymentMethods />} />
+          <Route path="/history" element={<History />} />
           
           {/* Editor Routes */}
           <Route path="/editor/hero" element={<HeroEditor />} />
