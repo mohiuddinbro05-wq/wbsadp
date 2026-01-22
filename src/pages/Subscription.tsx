@@ -23,7 +23,7 @@ interface Package {
   videosPerDay: number;
   perVideoRate: string;
   supportLevel: "basic" | "priority" | "premium" | "vip";
-  withdrawalFrequency: "weekly" | "daily" | "instant";
+  withdrawalFrequency: "none" | "monthly" | "weekly" | "daily" | "instant";
   isPopular?: boolean;
   isActive: boolean;
 }
@@ -147,6 +147,8 @@ function PackageCard({
   };
 
   const withdrawalLabels = {
+    none: "No withdrawals",
+    monthly: "Monthly withdrawals",
     weekly: "Weekly withdrawals",
     daily: "Daily withdrawals",
     instant: "Instant withdrawals",
@@ -575,7 +577,7 @@ function PackageDialog({ open, onClose, pkg, onSave }: PackageDialogProps) {
             <div className="space-y-2">
               <Label>Withdrawal</Label>
               <div className="flex flex-wrap gap-2">
-                {(["weekly", "daily", "instant"] as const).map((freq) => (
+                {(["none", "monthly", "weekly", "daily", "instant"] as const).map((freq) => (
                   <Button
                     key={freq}
                     type="button"
