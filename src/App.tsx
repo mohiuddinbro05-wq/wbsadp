@@ -14,6 +14,7 @@ import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Videos from "./pages/Videos";
 import Subscription from "./pages/Subscription";
+import PaymentMethods from "./pages/PaymentMethods";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/subscription" element={<Subscription />} />
+          <Route path="/payment-methods" element={<PaymentMethods />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -16,6 +16,7 @@ import {
   ChevronDown,
   Video,
   Crown,
+  Wallet,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ const menuSections: MenuSection[] = [
   {
     label: "MANAGEMENT",
     items: [
+      { title: "Payment Methods", icon: Wallet, path: "/payment-methods" },
       { title: "Referrals", icon: Gift, path: "/referrals" },
       { title: "Transactions", icon: CreditCard, path: "/transactions" },
       { title: "Reports", icon: FileText, path: "/reports" },
