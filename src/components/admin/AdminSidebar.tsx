@@ -14,19 +14,43 @@ import {
   Shield,
   X,
   ChevronDown,
+  ChevronRight,
   Video,
   Crown,
   Wallet,
+  Home,
+  Image,
+  Type,
+  Layers,
+  Star,
+  HelpCircle,
+  Phone,
+  UserCog,
+  UserPlus,
+  Headphones,
+  UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
+interface SubMenuItem {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path: string;
+}
 
 interface MenuItem {
   title: string;
   icon: React.ComponentType<{ className?: string }>;
-  path: string;
+  path?: string;
   badge?: number;
+  subItems?: SubMenuItem[];
 }
 
 interface MenuSection {
@@ -49,6 +73,27 @@ const menuSections: MenuSection[] = [
     items: [
       { title: "Videos", icon: Video, path: "/videos" },
       { title: "Subscription", icon: Crown, path: "/subscription" },
+      {
+        title: "Home Page Editor",
+        icon: Home,
+        subItems: [
+          { title: "Hero Section", icon: Image, path: "/editor/hero" },
+          { title: "About Section", icon: Type, path: "/editor/about" },
+          { title: "Features", icon: Layers, path: "/editor/features" },
+          { title: "Testimonials", icon: Star, path: "/editor/testimonials" },
+          { title: "FAQ", icon: HelpCircle, path: "/editor/faq" },
+          { title: "Contact Info", icon: Phone, path: "/editor/contact" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "TEAM MANAGEMENT",
+    items: [
+      { title: "Admin Users", icon: UserCog, path: "/team/admins" },
+      { title: "Agents", icon: UserPlus, path: "/team/agents" },
+      { title: "Support Team", icon: Headphones, path: "/team/support" },
+      { title: "Moderators", icon: UserCheck, path: "/team/moderators" },
     ],
   },
   {
@@ -76,6 +121,22 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
   const location = useLocation();
+  const [openSubMenus, setOpenSubMenus] = useState<string[]>([]);
+
+  const toggleSubMenu = (title: string) => {
+    setOpenSubMenus((prev) =>
+      prev.includes(title)
+        ? prev.filter((t) => t !== title)
+        : [...prev, title]
+    );
+  };
+
+  const isSubMenuOpen = (title: string) => openSubMenus.includes(title);
+
+  const isSubItemActive = (subItems?: SubMenuItem[]) => {
+    if (!subItems) return false;
+    return subItems.some((sub) => location.pathname === sub.path);
+  };
 
   return (
     <>
@@ -123,11 +184,73 @@ export function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
                 </p>
                 <nav className="space-y-1">
                   {section.items.map((item, itemIndex) => {
-                    const isActive = location.pathname === item.path;
+                    const hasSubItems = item.subItems && item.subItems.length > 0;
+                    const isActive = item.path ? location.pathname === item.path : false;
+                    const isSubActive = isSubItemActive(item.subItems);
+                    const isExpanded = isSubMenuOpen(item.title) || isSubActive;
+
+                    if (hasSubItems) {
+                      return (
+                        <Collapsible
+                          key={item.title}
+                          open={isExpanded}
+                          onOpenChange={() => toggleSubMenu(item.title)}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <button
+                              className={cn(
+                                "sidebar-link group w-full animate-fade-in",
+                                isSubActive ? "sidebar-link-active" : "sidebar-link-inactive"
+                              )}
+                              style={{ animationDelay: `${(sectionIndex * 4 + itemIndex) * 50}ms` }}
+                            >
+                              <item.icon
+                                className={cn(
+                                  "w-5 h-5 transition-colors",
+                                  isSubActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                                )}
+                              />
+                              <span className="flex-1 text-left">{item.title}</span>
+                              <ChevronRight
+                                className={cn(
+                                  "w-4 h-4 transition-transform duration-200",
+                                  isExpanded && "rotate-90"
+                                )}
+                              />
+                            </button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="pl-4 mt-1 space-y-1">
+                            {item.subItems?.map((subItem) => {
+                              const isSubItemActive = location.pathname === subItem.path;
+                              return (
+                                <Link
+                                  key={subItem.path}
+                                  to={subItem.path}
+                                  onClick={() => window.innerWidth < 1024 && onToggle()}
+                                  className={cn(
+                                    "sidebar-link group text-sm",
+                                    isSubItemActive ? "sidebar-link-active" : "sidebar-link-inactive"
+                                  )}
+                                >
+                                  <subItem.icon
+                                    className={cn(
+                                      "w-4 h-4 transition-colors",
+                                      isSubItemActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                                    )}
+                                  />
+                                  <span className="flex-1">{subItem.title}</span>
+                                </Link>
+                              );
+                            })}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    }
+
                     return (
                       <Link
                         key={item.path}
-                        to={item.path}
+                        to={item.path!}
                         onClick={() => window.innerWidth < 1024 && onToggle()}
                         className={cn(
                           "sidebar-link group animate-fade-in",
