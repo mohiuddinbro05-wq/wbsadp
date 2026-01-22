@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +29,44 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { Plus, MoreVertical, Edit, Trash2, Shield, Search, UserCog, UserPlus, Headphones, UserCheck } from "lucide-react";
+import { 
+  Plus, 
+  MoreVertical, 
+  Edit, 
+  Trash2, 
+  Shield, 
+  Search, 
+  UserCog, 
+  UserPlus, 
+  Headphones, 
+  UserCheck,
+  Key,
+  LayoutDashboard,
+  TrendingDown,
+  TrendingUp,
+  Users,
+  History,
+  Video,
+  Crown,
+  Wallet,
+  Home,
+  Gift,
+  CreditCard,
+  FileText,
+  Bell,
+  Settings,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type UserRole = "admin" | "moderator" | "agent" | "support";
+
+interface Permission {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  category: string;
+}
 
 interface TeamMember {
   id: string;
@@ -41,13 +76,51 @@ interface TeamMember {
   status: "active" | "inactive";
   avatar?: string;
   createdAt: string;
+  permissions: string[];
 }
+
+const allPermissions: Permission[] = [
+  // Main Menu
+  { id: "overview", label: "Overview", description: "ড্যাশবোর্ড দেখতে পারবে", icon: LayoutDashboard, category: "Main Menu" },
+  { id: "withdrawals", label: "Withdrawals", description: "উত্তোলন ম্যানেজ করতে পারবে", icon: TrendingDown, category: "Main Menu" },
+  { id: "deposits", label: "Deposits", description: "ডিপোজিট ম্যানেজ করতে পারবে", icon: TrendingUp, category: "Main Menu" },
+  { id: "users", label: "Users", description: "ইউজার দেখতে ও ম্যানেজ করতে পারবে", icon: Users, category: "Main Menu" },
+  { id: "history", label: "History", description: "ইউজার হিস্ট্রি সার্চ করতে পারবে", icon: History, category: "Main Menu" },
+  
+  // Content
+  { id: "videos", label: "Videos", description: "ভিডিও ম্যানেজ করতে পারবে", icon: Video, category: "Content" },
+  { id: "subscription", label: "Subscription", description: "সাবস্ক্রিপশন প্যাকেজ ম্যানেজ করতে পারবে", icon: Crown, category: "Content" },
+  { id: "home_editor", label: "Home Page Editor", description: "হোম পেজ এডিট করতে পারবে", icon: Home, category: "Content" },
+  
+  // Team Management
+  { id: "team_admins", label: "Admin Users", description: "এডমিন ম্যানেজ করতে পারবে", icon: Shield, category: "Team" },
+  { id: "team_agents", label: "Agents", description: "এজেন্ট ম্যানেজ করতে পারবে", icon: UserPlus, category: "Team" },
+  { id: "team_support", label: "Support Team", description: "সাপোর্ট টিম ম্যানেজ করতে পারবে", icon: Headphones, category: "Team" },
+  { id: "team_moderators", label: "Moderators", description: "মডারেটর ম্যানেজ করতে পারবে", icon: UserCheck, category: "Team" },
+  
+  // Management
+  { id: "payment_methods", label: "Payment Methods", description: "পেমেন্ট মেথড ম্যানেজ করতে পারবে", icon: Wallet, category: "Management" },
+  { id: "referrals", label: "Referrals", description: "রেফারেল দেখতে পারবে", icon: Gift, category: "Management" },
+  { id: "transactions", label: "Transactions", description: "ট্রানজেকশন দেখতে পারবে", icon: CreditCard, category: "Management" },
+  { id: "reports", label: "Reports", description: "রিপোর্ট দেখতে পারবে", icon: FileText, category: "Management" },
+  
+  // System
+  { id: "notifications", label: "Notifications", description: "নোটিফিকেশন ম্যানেজ করতে পারবে", icon: Bell, category: "System" },
+  { id: "settings", label: "Settings", description: "সেটিংস পরিবর্তন করতে পারবে", icon: Settings, category: "System" },
+];
 
 const roleConfig = {
   admin: { label: "Admin", icon: Shield, color: "bg-red-500/10 text-red-500" },
   moderator: { label: "Moderator", icon: UserCheck, color: "bg-purple-500/10 text-purple-500" },
   agent: { label: "Agent", icon: UserPlus, color: "bg-blue-500/10 text-blue-500" },
   support: { label: "Support", icon: Headphones, color: "bg-green-500/10 text-green-500" },
+};
+
+const defaultPermissionsByRole: Record<UserRole, string[]> = {
+  admin: allPermissions.map(p => p.id), // All permissions
+  moderator: ["overview", "users", "videos", "history", "reports"],
+  agent: ["overview", "withdrawals", "deposits", "history"],
+  support: ["overview", "users", "history"],
 };
 
 interface TeamManagementProps {
@@ -60,15 +133,65 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  const [selectedMemberForPermission, setSelectedMemberForPermission] = useState<TeamMember | null>(null);
   
   const [members, setMembers] = useState<TeamMember[]>([
-    { id: "1", name: "Admin User", email: "admin@example.com", role: "admin", status: "active", createdAt: "2024-01-15" },
-    { id: "2", name: "Moderator 1", email: "mod1@example.com", role: "moderator", status: "active", createdAt: "2024-02-10" },
-    { id: "3", name: "Agent Rahim", email: "rahim@example.com", role: "agent", status: "active", createdAt: "2024-03-05" },
-    { id: "4", name: "Support Karim", email: "karim@example.com", role: "support", status: "active", createdAt: "2024-03-20" },
-    { id: "5", name: "Agent Fatima", email: "fatima@example.com", role: "agent", status: "inactive", createdAt: "2024-04-01" },
-    { id: "6", name: "Support Ayesha", email: "ayesha@example.com", role: "support", status: "active", createdAt: "2024-04-15" },
+    { 
+      id: "1", 
+      name: "Admin User", 
+      email: "admin@example.com", 
+      role: "admin", 
+      status: "active", 
+      createdAt: "2024-01-15",
+      permissions: defaultPermissionsByRole.admin
+    },
+    { 
+      id: "2", 
+      name: "Moderator 1", 
+      email: "mod1@example.com", 
+      role: "moderator", 
+      status: "active", 
+      createdAt: "2024-02-10",
+      permissions: defaultPermissionsByRole.moderator
+    },
+    { 
+      id: "3", 
+      name: "Agent Rahim", 
+      email: "rahim@example.com", 
+      role: "agent", 
+      status: "active", 
+      createdAt: "2024-03-05",
+      permissions: defaultPermissionsByRole.agent
+    },
+    { 
+      id: "4", 
+      name: "Support Karim", 
+      email: "karim@example.com", 
+      role: "support", 
+      status: "active", 
+      createdAt: "2024-03-20",
+      permissions: defaultPermissionsByRole.support
+    },
+    { 
+      id: "5", 
+      name: "Agent Fatima", 
+      email: "fatima@example.com", 
+      role: "agent", 
+      status: "inactive", 
+      createdAt: "2024-04-01",
+      permissions: defaultPermissionsByRole.agent
+    },
+    { 
+      id: "6", 
+      name: "Support Ayesha", 
+      email: "ayesha@example.com", 
+      role: "support", 
+      status: "active", 
+      createdAt: "2024-04-15",
+      permissions: defaultPermissionsByRole.support
+    },
   ]);
 
   const [formData, setFormData] = useState({
@@ -77,6 +200,8 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
     password: "",
     role: filterRole || ("agent" as UserRole),
   });
+
+  const [tempPermissions, setTempPermissions] = useState<string[]>([]);
 
   const filteredMembers = members.filter((member) => {
     const matchesSearch = 
@@ -87,6 +212,7 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
   });
 
   const handleSubmit = () => {
+    const role = formData.role;
     if (editingMember) {
       setMembers(members.map((m) =>
         m.id === editingMember.id
@@ -99,9 +225,10 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
         id: Date.now().toString(),
         name: formData.name,
         email: formData.email,
-        role: formData.role,
+        role: role,
         status: "active",
         createdAt: new Date().toISOString().split("T")[0],
+        permissions: defaultPermissionsByRole[role],
       };
       setMembers([...members, newMember]);
       toast({ title: "সফল!", description: "নতুন মেম্বার যুক্ত হয়েছে।" });
@@ -134,6 +261,50 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
         : m
     ));
   };
+
+  const openPermissionDialog = (member: TeamMember) => {
+    setSelectedMemberForPermission(member);
+    setTempPermissions([...member.permissions]);
+    setIsPermissionDialogOpen(true);
+  };
+
+  const togglePermission = (permissionId: string) => {
+    setTempPermissions(prev => 
+      prev.includes(permissionId)
+        ? prev.filter(p => p !== permissionId)
+        : [...prev, permissionId]
+    );
+  };
+
+  const selectAllPermissions = () => {
+    setTempPermissions(allPermissions.map(p => p.id));
+  };
+
+  const clearAllPermissions = () => {
+    setTempPermissions([]);
+  };
+
+  const savePermissions = () => {
+    if (selectedMemberForPermission) {
+      setMembers(members.map(m => 
+        m.id === selectedMemberForPermission.id
+          ? { ...m, permissions: tempPermissions }
+          : m
+      ));
+      toast({ title: "সফল!", description: "পারমিশন আপডেট হয়েছে।" });
+    }
+    setIsPermissionDialogOpen(false);
+    setSelectedMemberForPermission(null);
+  };
+
+  // Group permissions by category
+  const groupedPermissions = allPermissions.reduce((acc, permission) => {
+    if (!acc[permission.category]) {
+      acc[permission.category] = [];
+    }
+    acc[permission.category].push(permission);
+    return acc;
+  }, {} as Record<string, Permission[]>);
 
   return (
     <AdminLayout title={title}>
@@ -224,6 +395,87 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
           </Dialog>
         </div>
 
+        {/* Permission Dialog */}
+        <Dialog open={isPermissionDialogOpen} onOpenChange={setIsPermissionDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Key className="w-5 h-5" />
+                পারমিশন সেটিংস
+              </DialogTitle>
+              <DialogDescription>
+                {selectedMemberForPermission?.name} - এর জন্য এক্সেস পারমিশন সিলেক্ট করুন
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-4">
+              <div className="flex gap-2 mb-4">
+                <Button variant="outline" size="sm" onClick={selectAllPermissions}>
+                  সব সিলেক্ট
+                </Button>
+                <Button variant="outline" size="sm" onClick={clearAllPermissions}>
+                  সব বাদ দিন
+                </Button>
+              </div>
+
+              <div className="space-y-6">
+                {Object.entries(groupedPermissions).map(([category, permissions]) => (
+                  <div key={category} className="space-y-3">
+                    <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
+                      {category}
+                    </h4>
+                    <div className="grid gap-2">
+                      {permissions.map((permission) => {
+                        const Icon = permission.icon;
+                        const isChecked = tempPermissions.includes(permission.id);
+                        return (
+                          <div
+                            key={permission.id}
+                            className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                              isChecked 
+                                ? "bg-primary/5 border-primary/30" 
+                                : "bg-card hover:bg-muted/50"
+                            }`}
+                            onClick={() => togglePermission(permission.id)}
+                          >
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={() => togglePermission(permission.id)}
+                            />
+                            <Icon className={`w-5 h-5 ${isChecked ? "text-primary" : "text-muted-foreground"}`} />
+                            <div className="flex-1">
+                              <p className={`font-medium ${isChecked ? "text-foreground" : "text-muted-foreground"}`}>
+                                {permission.label}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {permission.description}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <div className="flex items-center gap-2 mr-auto">
+                <Badge variant="secondary">
+                  {tempPermissions.length} / {allPermissions.length} সিলেক্টেড
+                </Badge>
+              </div>
+              <Button variant="outline" onClick={() => setIsPermissionDialogOpen(false)}>
+                বাতিল
+              </Button>
+              <Button onClick={savePermissions}>
+                সেভ করুন
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -256,7 +508,7 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-medium text-foreground">{member.name}</p>
                           <Badge variant="secondary" className={roleInfo.color}>
                             <RoleIcon className="w-3 h-3 mr-1" />
@@ -264,13 +516,30 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">{member.email}</p>
-                        <p className="text-xs text-muted-foreground">যুক্ত হয়েছে: {member.createdAt}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs text-muted-foreground">
+                            {member.permissions.length} পারমিশন
+                          </span>
+                          <span className="text-xs text-muted-foreground">•</span>
+                          <span className="text-xs text-muted-foreground">
+                            যুক্ত: {member.createdAt}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Badge variant={member.status === "active" ? "default" : "secondary"}>
                         {member.status === "active" ? "সক্রিয়" : "নিষ্ক্রিয়"}
                       </Badge>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => openPermissionDialog(member)}
+                        className="hidden sm:flex"
+                      >
+                        <Key className="w-4 h-4 mr-2" />
+                        পারমিশন
+                      </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon">
@@ -278,6 +547,10 @@ export default function TeamManagement({ filterRole, title, description }: TeamM
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => openPermissionDialog(member)}>
+                            <Key className="w-4 h-4 mr-2" />
+                            পারমিশন
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleEdit(member)}>
                             <Edit className="w-4 h-4 mr-2" />
                             এডিট
