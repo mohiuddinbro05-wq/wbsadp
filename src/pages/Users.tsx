@@ -435,7 +435,7 @@ const UsersPage = () => {
     <AdminLayout title="Users">
       <div className="space-y-6">
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
           <MiniStat title="Total Users" value="12,847" icon={Users} variant="info" index={0} />
           <MiniStat title="Active" value="11,523" icon={UserPlus} variant="success" index={1} />
           <MiniStat title="Banned" value="156" icon={UserX} variant="destructive" index={2} />
