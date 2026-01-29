@@ -2,8 +2,9 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { DataTable, StatusBadge, Column } from "@/components/admin/DataTable";
 import { MiniStat } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
-import { Eye, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Gift, Activity, TrendingUp, Wallet } from "lucide-react";
+import { Eye, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Gift, Activity, TrendingUp, Wallet, Calendar } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface Transaction {
   id: string;
@@ -27,10 +28,10 @@ const transactions: Transaction[] = [
 ];
 
 const typeConfig = {
-  deposit: { label: "Deposit", icon: ArrowDownRight, color: "text-success" },
-  withdrawal: { label: "Withdrawal", icon: ArrowUpRight, color: "text-destructive" },
-  transfer: { label: "Transfer", icon: ArrowLeftRight, color: "text-info" },
-  bonus: { label: "Bonus", icon: Gift, color: "text-warning" },
+  deposit: { label: "Deposit", icon: ArrowDownRight, color: "text-success", bgColor: "bg-success/10", gradient: "gradient-success" },
+  withdrawal: { label: "Withdrawal", icon: ArrowUpRight, color: "text-destructive", bgColor: "bg-destructive/10", gradient: "gradient-warning" },
+  transfer: { label: "Transfer", icon: ArrowLeftRight, color: "text-info", bgColor: "bg-info/10", gradient: "gradient-info" },
+  bonus: { label: "Bonus", icon: Gift, color: "text-warning", bgColor: "bg-warning/10", gradient: "gradient-primary" },
 };
 
 const columns: Column<Transaction>[] = [
@@ -101,6 +102,72 @@ const typeFilters = [
   { value: "bonus", label: "Bonus" },
 ];
 
+// Mobile Card Renderer for Transactions
+const mobileTransactionCard = (row: Transaction, index: number) => {
+  const config = typeConfig[row.type];
+  const Icon = config.icon;
+
+  return (
+    <div
+      key={row.id}
+      className="bg-card rounded-2xl border border-border p-4 shadow-soft animate-fade-in-up animation-fill-forwards opacity-0"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold text-primary-foreground shrink-0",
+            config.gradient
+          )}>
+            {row.user.charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <h4 className="font-semibold text-foreground truncate">{row.user}</h4>
+            <p className="text-sm text-muted-foreground">{row.phone}</p>
+          </div>
+        </div>
+        <StatusBadge status={row.status} size="sm" />
+      </div>
+
+      {/* Type & Amount */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className={cn("rounded-xl p-3", config.bgColor)}>
+          <p className="text-xs text-muted-foreground mb-0.5">Type</p>
+          <div className={cn("flex items-center gap-1.5 font-semibold", config.color)}>
+            <Icon className="w-4 h-4" />
+            {config.label}
+          </div>
+        </div>
+        <div className="bg-muted/50 rounded-xl p-3">
+          <p className="text-xs text-muted-foreground mb-0.5">Amount</p>
+          <p className="text-lg font-bold text-foreground">{row.amount}</p>
+        </div>
+      </div>
+
+      {/* Fee & Meta Info */}
+      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4">
+        <span className="bg-muted px-2 py-1 rounded-lg font-mono">{row.id}</span>
+        {row.fee !== "৳0" && (
+          <span className="bg-muted px-2 py-1 rounded-lg">Fee: {row.fee}</span>
+        )}
+        <span className="ml-auto flex items-center gap-1">
+          <Calendar className="w-3 h-3" />
+          {row.date}
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center justify-end pt-3 border-t border-border">
+        <Button size="sm" variant="outline" className="gap-2">
+          <Eye className="w-4 h-4" />
+          View Details
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 const Transactions = () => {
   return (
     <AdminLayout title="Transactions">
@@ -119,6 +186,7 @@ const Transactions = () => {
           data={transactions}
           title="Transaction History"
           searchPlaceholder="Search by user, ID..."
+          mobileCardRender={mobileTransactionCard}
           filters={[
             { key: "status", label: "Status", options: statusFilters },
             { key: "type", label: "Type", options: typeFilters },

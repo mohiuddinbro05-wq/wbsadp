@@ -4,6 +4,7 @@ import { DataTable, StatusBadge, Column } from "@/components/admin/DataTable";
 import { Users, TrendingUp, TrendingDown, DollarSign, Activity, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 interface RecentTransaction {
   id: string;
@@ -49,6 +50,54 @@ const columns: Column<RecentTransaction>[] = [
   },
   { key: "date", label: "Date" },
 ];
+
+// Mobile Card Renderer for Recent Transactions
+const mobileTransactionCard = (row: RecentTransaction, index: number) => {
+  const isWithdrawal = row.type === "Withdrawal";
+  
+  return (
+    <div
+      key={row.id}
+      className="bg-card rounded-2xl border border-border p-4 shadow-soft animate-fade-in-up animation-fill-forwards opacity-0"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            "w-10 h-10 rounded-xl flex items-center justify-center text-base font-bold text-primary-foreground shrink-0",
+            isWithdrawal ? "gradient-warning" : "gradient-success"
+          )}>
+            {row.user.charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <h4 className="font-semibold text-foreground truncate text-sm">{row.user}</h4>
+            <p className="text-xs text-muted-foreground font-mono">{row.id}</p>
+          </div>
+        </div>
+        <StatusBadge status={row.status} size="sm" />
+      </div>
+
+      {/* Details */}
+      <div className="flex items-center justify-between gap-3 pt-3 border-t border-border">
+        <div className="flex items-center gap-2">
+          {isWithdrawal ? (
+            <TrendingDown className="w-4 h-4 text-destructive" />
+          ) : (
+            <TrendingUp className="w-4 h-4 text-success" />
+          )}
+          <span className={cn(
+            "font-bold",
+            isWithdrawal ? "text-destructive" : "text-success"
+          )}>
+            {isWithdrawal ? "-" : "+"}{row.amount}
+          </span>
+        </div>
+        <span className="text-xs text-muted-foreground">{row.date}</span>
+      </div>
+    </div>
+  );
+};
 
 const Index = () => {
   return (
@@ -138,6 +187,7 @@ const Index = () => {
           title="Recent Transactions"
           searchable={false}
           pageSize={5}
+          mobileCardRender={mobileTransactionCard}
           actions={
             <Link to="/transactions">
               <Button variant="outline" size="sm" className="gap-2">
