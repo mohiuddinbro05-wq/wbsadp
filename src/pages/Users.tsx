@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Eye, Ban, UserCheck, Users, UserPlus, UserX, UserCog, Phone, Mail, Calendar, Wallet, Gift, CreditCard, History, AlertTriangle, Shield, ShieldCheck, TrendingUp, Target } from "lucide-react";
+import { Eye, EyeOff, Ban, UserCheck, Users, UserPlus, UserX, UserCog, Phone, Mail, Calendar, Wallet, Gift, CreditCard, History, AlertTriangle, Shield, ShieldCheck, TrendingUp, Target, Key, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
@@ -18,6 +18,7 @@ interface User {
   name: string;
   phone: string;
   email: string;
+  password: string;
   balance: string;
   balanceNum: number;
   status: "active" | "banned" | "pending";
@@ -31,14 +32,50 @@ interface User {
 }
 
 const users: User[] = [
-  { id: "USR001", profileId: "PRF-2025-001", name: "আহমেদ হোসেন", phone: "01712345678", email: "ahmed@example.com", balance: "৳15,000", balanceNum: 15000, status: "active", joinDate: "2025-12-15", referrals: 12, totalDeposit: "৳85,000", totalWithdraw: "৳70,000", referredBy: "করিম উদ্দিন", turnover: 50000, currentTurnover: 45000 },
-  { id: "USR002", profileId: "PRF-2025-002", name: "রাহেলা খাতুন", phone: "01898765432", email: "rahela@example.com", balance: "৳8,500", balanceNum: 8500, status: "active", joinDate: "2025-12-20", referrals: 8, totalDeposit: "৳45,000", totalWithdraw: "৳36,500", turnover: 30000, currentTurnover: 30000 },
-  { id: "USR003", profileId: "PRF-2025-003", name: "করিম উদ্দিন", phone: "01556789012", email: "karim@example.com", balance: "৳0", balanceNum: 0, status: "banned", joinDate: "2025-11-10", referrals: 0, totalDeposit: "৳12,000", totalWithdraw: "৳12,000", turnover: 0, currentTurnover: 0 },
-  { id: "USR004", profileId: "PRF-2025-004", name: "নাজমা বেগম", phone: "01612345678", email: "nazma@example.com", balance: "৳22,300", balanceNum: 22300, status: "active", joinDate: "2026-01-05", referrals: 15, totalDeposit: "৳120,000", totalWithdraw: "৳97,700", referredBy: "আহমেদ হোসেন", turnover: 100000, currentTurnover: 85000 },
-  { id: "USR005", profileId: "PRF-2025-005", name: "সোহেল রানা", phone: "01812345678", email: "sohel@example.com", balance: "৳5,750", balanceNum: 5750, status: "pending", joinDate: "2026-01-20", referrals: 3, totalDeposit: "৳15,000", totalWithdraw: "৳9,250", turnover: 20000, currentTurnover: 5000 },
-  { id: "USR006", profileId: "PRF-2025-006", name: "মাহমুদ হাসান", phone: "01912345678", email: "mahmud@example.com", balance: "৳18,200", balanceNum: 18200, status: "active", joinDate: "2025-10-25", referrals: 20, totalDeposit: "৳200,000", totalWithdraw: "৳181,800", turnover: 150000, currentTurnover: 150000 },
-  { id: "USR007", profileId: "PRF-2025-007", name: "ফারজানা আক্তার", phone: "01312345678", email: "farzana@example.com", balance: "৳3,100", balanceNum: 3100, status: "pending", joinDate: "2026-01-21", referrals: 0, totalDeposit: "৳5,000", totalWithdraw: "৳1,900", turnover: 10000, currentTurnover: 2000 },
+  { id: "USR001", profileId: "PRF-2025-001", name: "আহমেদ হোসেন", phone: "01712345678", email: "ahmed@example.com", password: "Ahmed@123", balance: "৳15,000", balanceNum: 15000, status: "active", joinDate: "2025-12-15", referrals: 12, totalDeposit: "৳85,000", totalWithdraw: "৳70,000", referredBy: "করিম উদ্দিন", turnover: 50000, currentTurnover: 45000 },
+  { id: "USR002", profileId: "PRF-2025-002", name: "রাহেলা খাতুন", phone: "01898765432", email: "rahela@example.com", password: "Rahela@456", balance: "৳8,500", balanceNum: 8500, status: "active", joinDate: "2025-12-20", referrals: 8, totalDeposit: "৳45,000", totalWithdraw: "৳36,500", turnover: 30000, currentTurnover: 30000 },
+  { id: "USR003", profileId: "PRF-2025-003", name: "করিম উদ্দিন", phone: "01556789012", email: "karim@example.com", password: "Karim@789", balance: "৳0", balanceNum: 0, status: "banned", joinDate: "2025-11-10", referrals: 0, totalDeposit: "৳12,000", totalWithdraw: "৳12,000", turnover: 0, currentTurnover: 0 },
+  { id: "USR004", profileId: "PRF-2025-004", name: "নাজমা বেগম", phone: "01612345678", email: "nazma@example.com", password: "Nazma@321", balance: "৳22,300", balanceNum: 22300, status: "active", joinDate: "2026-01-05", referrals: 15, totalDeposit: "৳120,000", totalWithdraw: "৳97,700", referredBy: "আহমেদ হোসেন", turnover: 100000, currentTurnover: 85000 },
+  { id: "USR005", profileId: "PRF-2025-005", name: "সোহেল রানা", phone: "01812345678", email: "sohel@example.com", password: "Sohel@654", balance: "৳5,750", balanceNum: 5750, status: "pending", joinDate: "2026-01-20", referrals: 3, totalDeposit: "৳15,000", totalWithdraw: "৳9,250", turnover: 20000, currentTurnover: 5000 },
+  { id: "USR006", profileId: "PRF-2025-006", name: "মাহমুদ হাসান", phone: "01912345678", email: "mahmud@example.com", password: "Mahmud@987", balance: "৳18,200", balanceNum: 18200, status: "active", joinDate: "2025-10-25", referrals: 20, totalDeposit: "৳200,000", totalWithdraw: "৳181,800", turnover: 150000, currentTurnover: 150000 },
+  { id: "USR007", profileId: "PRF-2025-007", name: "ফারজানা আক্তার", phone: "01312345678", email: "farzana@example.com", password: "Farzana@111", balance: "৳3,100", balanceNum: 3100, status: "pending", joinDate: "2026-01-21", referrals: 0, totalDeposit: "৳5,000", totalWithdraw: "৳1,900", turnover: 10000, currentTurnover: 2000 },
 ];
+
+function PasswordField({ password }: { password: string }) {
+  const [showPassword, setShowPassword] = useState(false);
+  
+  return (
+    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+      <div>
+        <span className="text-xs text-muted-foreground block mb-0.5">পাসওয়ার্ড</span>
+        <span className="font-mono text-sm font-medium">
+          {showPassword ? password : "••••••••"}
+        </span>
+      </div>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => {
+            navigator.clipboard.writeText(password);
+            toast({ title: "কপি হয়েছে", description: "পাসওয়ার্ড কপি করা হয়েছে" });
+          }}
+        >
+          <Copy className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 function UserStatusBadge({ status }: { status: User["status"] }) {
   const config = {
@@ -287,19 +324,47 @@ function ActionDialog({ open, onClose, user, action, onConfirm }: ActionDialogPr
                 </div>
               </div>
 
+              {/* Account Credentials */}
+              <div className="p-4 rounded-lg border bg-card">
+                <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <Key className="w-4 h-4" />
+                  লগইন তথ্য
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div>
+                      <span className="text-xs text-muted-foreground block mb-0.5">ইউজার আইডি</span>
+                      <span className="font-mono text-sm font-medium">{user.id}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => {
+                        navigator.clipboard.writeText(user.id);
+                        toast({ title: "কপি হয়েছে", description: "ইউজার আইডি কপি করা হয়েছে" });
+                      }}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <PasswordField password={user.password} />
+                </div>
+              </div>
+
               {/* Account Information */}
               <div className="p-4 rounded-lg border bg-card">
                 <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  Account Information
+                  একাউন্ট তথ্য
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <span className="text-sm text-muted-foreground">User ID</span>
-                    <span className="font-mono text-sm">{user.id}</span>
+                    <span className="text-sm text-muted-foreground">Profile ID</span>
+                    <span className="font-mono text-sm">{user.profileId}</span>
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <span className="text-sm text-muted-foreground">Join Date</span>
+                    <span className="text-sm text-muted-foreground">যোগদান তারিখ</span>
                     <span className="text-sm font-medium">{user.joinDate}</span>
                   </div>
                 </div>
