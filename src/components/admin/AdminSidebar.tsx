@@ -30,6 +30,7 @@ import {
   Headphones,
   UserCheck,
   History,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -68,6 +69,7 @@ const menuSections: MenuSection[] = [
       { title: "Deposits", icon: TrendingUp, path: "/deposits", badge: 8 },
       { title: "Users", icon: Users, path: "/users" },
       { title: "History", icon: History, path: "/history" },
+      { title: "Requests", icon: ClipboardList, path: "/requests", badge: 4 },
     ],
   },
   {
