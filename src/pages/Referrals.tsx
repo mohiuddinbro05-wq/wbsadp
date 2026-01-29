@@ -2,7 +2,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { DataTable, Column } from "@/components/admin/DataTable";
 import { MiniStat } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
-import { Eye, Copy, Gift, Users, TrendingUp } from "lucide-react";
+import { Eye, Copy, Gift, Users, TrendingUp, Calendar, User } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface Referral {
@@ -86,6 +86,67 @@ const columns: Column<Referral>[] = [
   },
 ];
 
+// Mobile Card Renderer for Referrals
+const mobileReferralCard = (row: Referral, index: number) => {
+  return (
+    <div
+      key={row.id}
+      className="bg-card rounded-2xl border border-border p-4 shadow-soft animate-fade-in-up animation-fill-forwards opacity-0"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
+      {/* Header with Code */}
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2">
+          <code className="bg-primary/10 text-primary px-3 py-1.5 rounded-lg text-sm font-bold">{row.code}</code>
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="h-8 w-8"
+            onClick={() => copyToClipboard(row.code)}
+          >
+            <Copy className="w-4 h-4" />
+          </Button>
+        </div>
+        <span className="font-bold text-success text-lg">{row.bonus}</span>
+      </div>
+
+      {/* Referrer & Referred */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="bg-muted/50 rounded-xl p-3">
+          <div className="flex items-center gap-1.5 mb-1">
+            <User className="w-3.5 h-3.5 text-primary" />
+            <p className="text-xs text-muted-foreground">Referrer</p>
+          </div>
+          <p className="font-semibold text-sm truncate">{row.referrer}</p>
+          <p className="text-xs text-muted-foreground">{row.referrerPhone}</p>
+        </div>
+        <div className="bg-muted/50 rounded-xl p-3">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Users className="w-3.5 h-3.5 text-success" />
+            <p className="text-xs text-muted-foreground">Referred</p>
+          </div>
+          <p className="font-semibold text-sm truncate">{row.referred}</p>
+          <p className="text-xs text-muted-foreground">{row.referredPhone}</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-3 border-t border-border">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="bg-muted px-2 py-1 rounded-lg font-mono">{row.id}</span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
+            {row.date}
+          </span>
+        </div>
+        <Button size="icon" variant="ghost" className="h-8 w-8">
+          <Eye className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 const Referrals = () => {
   return (
     <AdminLayout title="Referrals">
@@ -103,6 +164,7 @@ const Referrals = () => {
           data={referrals}
           title="Referral History"
           searchPlaceholder="Search by user, code..."
+          mobileCardRender={mobileReferralCard}
           onExport={() => toast({ title: "Export Started", description: "Your file will be downloaded shortly." })}
           onRefresh={() => toast({ title: "Refreshed", description: "Data has been refreshed." })}
         />
