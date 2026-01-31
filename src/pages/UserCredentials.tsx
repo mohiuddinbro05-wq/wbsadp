@@ -202,37 +202,37 @@ export default function UserCredentials() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <Card>
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <Users className="w-5 h-5 text-primary" />
+            <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
+              <div className="p-2 sm:p-3 rounded-xl bg-primary/10">
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.total}</p>
-                <p className="text-sm text-muted-foreground">মোট ইউজার</p>
+                <p className="text-lg sm:text-2xl font-bold">{stats.total}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">মোট ইউজার</p>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="p-3 rounded-xl bg-success/10">
-                <ShieldCheck className="w-5 h-5 text-success" />
+            <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
+              <div className="p-2 sm:p-3 rounded-xl bg-success/10">
+                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-success" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-success">{stats.active}</p>
-                <p className="text-sm text-muted-foreground">সক্রিয় ইউজার</p>
+                <p className="text-lg sm:text-2xl font-bold text-success">{stats.active}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">সক্রিয় ইউজার</p>
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="p-3 rounded-xl bg-warning/10">
-                <Shield className="w-5 h-5 text-warning" />
+          <Card className="col-span-2 lg:col-span-1">
+            <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
+              <div className="p-2 sm:p-3 rounded-xl bg-warning/10">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-warning" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-warning">{stats.pending}</p>
-                <p className="text-sm text-muted-foreground">পেন্ডিং ইউজার</p>
+                <p className="text-lg sm:text-2xl font-bold text-warning">{stats.pending}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">পেন্ডিং ইউজার</p>
               </div>
             </CardContent>
           </Card>
