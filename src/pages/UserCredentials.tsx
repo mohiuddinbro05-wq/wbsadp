@@ -187,6 +187,7 @@ export default function UserCredentials() {
     total: userCredentials.length,
     active: userCredentials.filter((u) => u.status === "active").length,
     pending: userCredentials.filter((u) => u.status === "pending").length,
+    banned: userCredentials.filter((u) => u.status === "banned").length,
   };
 
   return (
@@ -202,7 +203,7 @@ export default function UserCredentials() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card>
             <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
               <div className="p-2 sm:p-3 rounded-xl bg-primary/10">
@@ -225,7 +226,7 @@ export default function UserCredentials() {
               </div>
             </CardContent>
           </Card>
-          <Card className="col-span-2 lg:col-span-1">
+          <Card>
             <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
               <div className="p-2 sm:p-3 rounded-xl bg-warning/10">
                 <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-warning" />
@@ -233,6 +234,17 @@ export default function UserCredentials() {
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-warning">{stats.pending}</p>
                 <p className="text-xs sm:text-sm text-muted-foreground">পেন্ডিং ইউজার</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
+              <div className="p-2 sm:p-3 rounded-xl bg-destructive/10">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
+              </div>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-destructive">{stats.banned}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">ব্যান ইউজার</p>
               </div>
             </CardContent>
           </Card>
