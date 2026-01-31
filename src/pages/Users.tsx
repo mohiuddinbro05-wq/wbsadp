@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Eye, EyeOff, Ban, UserCheck, Users, UserPlus, UserX, UserCog, Phone, Mail, Calendar, Wallet, Gift, CreditCard, History, AlertTriangle, Shield, ShieldCheck, TrendingUp, Target, Key, Copy } from "lucide-react";
+import { Eye, Ban, UserCheck, Users, UserPlus, UserX, UserCog, Phone, Mail, Calendar, Wallet, Gift, CreditCard, History, AlertTriangle, Shield, ShieldCheck, TrendingUp, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
@@ -40,42 +40,6 @@ const users: User[] = [
   { id: "USR006", profileId: "PRF-2025-006", name: "মাহমুদ হাসান", phone: "01912345678", email: "mahmud@example.com", password: "Mahmud@987", balance: "৳18,200", balanceNum: 18200, status: "active", joinDate: "2025-10-25", referrals: 20, totalDeposit: "৳200,000", totalWithdraw: "৳181,800", turnover: 150000, currentTurnover: 150000 },
   { id: "USR007", profileId: "PRF-2025-007", name: "ফারজানা আক্তার", phone: "01312345678", email: "farzana@example.com", password: "Farzana@111", balance: "৳3,100", balanceNum: 3100, status: "pending", joinDate: "2026-01-21", referrals: 0, totalDeposit: "৳5,000", totalWithdraw: "৳1,900", turnover: 10000, currentTurnover: 2000 },
 ];
-
-function PasswordField({ password }: { password: string }) {
-  const [showPassword, setShowPassword] = useState(false);
-  
-  return (
-    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-      <div>
-        <span className="text-xs text-muted-foreground block mb-0.5">পাসওয়ার্ড</span>
-        <span className="font-mono text-sm font-medium">
-          {showPassword ? password : "••••••••"}
-        </span>
-      </div>
-      <div className="flex items-center gap-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setShowPassword(!showPassword)}
-        >
-          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => {
-            navigator.clipboard.writeText(password);
-            toast({ title: "কপি হয়েছে", description: "পাসওয়ার্ড কপি করা হয়েছে" });
-          }}
-        >
-          <Copy className="w-4 h-4" />
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 function UserStatusBadge({ status }: { status: User["status"] }) {
   const config = {
@@ -321,34 +285,6 @@ function ActionDialog({ open, onClose, user, action, onConfirm }: ActionDialogPr
                     <span className="text-sm text-muted-foreground">Referred By</span>
                     <span className="text-sm font-medium">{user.referredBy || "—"}</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Account Credentials */}
-              <div className="p-4 rounded-lg border bg-card">
-                <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
-                  <Key className="w-4 h-4" />
-                  লগইন তথ্য
-                </h4>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div>
-                      <span className="text-xs text-muted-foreground block mb-0.5">ইউজার আইডি</span>
-                      <span className="font-mono text-sm font-medium">{user.id}</span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => {
-                        navigator.clipboard.writeText(user.id);
-                        toast({ title: "কপি হয়েছে", description: "ইউজার আইডি কপি করা হয়েছে" });
-                      }}
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <PasswordField password={user.password} />
                 </div>
               </div>
 

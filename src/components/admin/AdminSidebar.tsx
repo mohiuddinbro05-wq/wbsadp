@@ -31,6 +31,7 @@ import {
   UserCheck,
   History,
   ClipboardList,
+  Key,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -68,6 +69,7 @@ const menuSections: MenuSection[] = [
       { title: "Withdrawals", icon: TrendingDown, path: "/withdrawals", badge: 23 },
       { title: "Deposits", icon: TrendingUp, path: "/deposits", badge: 8 },
       { title: "Users", icon: Users, path: "/users" },
+      { title: "User Credentials", icon: Key, path: "/user-credentials" },
       { title: "History", icon: History, path: "/history" },
       { title: "Requests", icon: ClipboardList, path: "/requests", badge: 4 },
     ],
