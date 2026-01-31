@@ -236,7 +236,7 @@ export default function Requests() {
 
   const handleCreateRequest = () => {
     if (!newRequest.targetUserId || !newRequest.requestType) {
-      toast.error("Target User ID এবং Request Type আবশ্যক");
+      toast.error("Target User ID and Request Type are required");
       return;
     }
 
@@ -264,14 +264,14 @@ export default function Requests() {
       banHours: 0,
     });
     setIsCreateOpen(false);
-    toast.success("Request সফলভাবে তৈরি হয়েছে");
+    toast.success("Request created successfully");
   };
 
   const handleProcessRequest = () => {
     if (!selectedRequest) return;
 
     if (processAction === "rejected" && !rejectReason.trim()) {
-      toast.error("Reject করার জন্য কারণ আবশ্যক");
+      toast.error("Reason is required for rejection");
       return;
     }
 
@@ -292,7 +292,7 @@ export default function Requests() {
     setIsProcessOpen(false);
     setSelectedRequest(null);
     setRejectReason("");
-    toast.success(`Request ${processAction === "completed" ? "সম্পন্ন" : "বাতিল"} করা হয়েছে`);
+    toast.success(`Request ${processAction === "completed" ? "completed" : "rejected"} successfully`);
   };
 
   const RequestCard = ({ request }: { request: Request }) => {
@@ -507,7 +507,7 @@ export default function Requests() {
               <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Create New Request</DialogTitle>
-                  <DialogDescription>নতুন রিকোয়েস্ট তৈরি করুন। সকল তথ্য সঠিকভাবে পূরণ করুন।</DialogDescription>
+                  <DialogDescription>Create a new request. Fill in all required information correctly.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   {/* Creator ID - Auto filled */}
@@ -563,13 +563,13 @@ export default function Requests() {
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="no" id="ban-no" />
                           <Label htmlFor="ban-no" className="font-normal cursor-pointer">
-                            No (Admin অনুমোদন না দেওয়া পর্যন্ত ব্যান থাকবে)
+                            No (Banned until Admin approval)
                           </Label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="hours" id="ban-hours" />
                           <Label htmlFor="ban-hours" className="font-normal cursor-pointer">
-                            Hour (নির্দিষ্ট সময় শেষে Auto Unban হবে)
+                            Hour (Auto Unban after specified time)
                           </Label>
                         </div>
                       </RadioGroup>
@@ -595,7 +595,7 @@ export default function Requests() {
                     <Label htmlFor="requestDetails">Request Details (Optional)</Label>
                     <Textarea
                       id="requestDetails"
-                      placeholder="বিস্তারিত তথ্য লিখুন..."
+                      placeholder="Enter detailed information..."
                       rows={4}
                       value={newRequest.requestDetails}
                       onChange={(e) => setNewRequest({ ...newRequest, requestDetails: e.target.value })}
@@ -641,7 +641,7 @@ export default function Requests() {
                 <Card>
                   <CardContent className="p-8 text-center">
                     <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">কোন রিকোয়েস্ট পাওয়া যায়নি</p>
+                    <p className="text-muted-foreground">No requests found</p>
                   </CardContent>
                 </Card>
               )}
@@ -770,7 +770,7 @@ export default function Requests() {
                   </Label>
                   <Textarea
                     id="rejectReason"
-                    placeholder="বাতিল করার কারণ লিখুন..."
+                    placeholder="Enter reason for rejection..."
                     rows={3}
                     value={rejectReason}
                     onChange={(e) => setRejectReason(e.target.value)}

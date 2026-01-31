@@ -18,13 +18,13 @@ interface Transaction {
 }
 
 const transactions: Transaction[] = [
-  { id: "TXN001", user: "আহমেদ হোসেন", phone: "01712345678", type: "withdrawal", amount: "৳5,000", fee: "৳25", status: "pending", date: "2026-01-22" },
-  { id: "TXN002", user: "রাহেলা খাতুন", phone: "01898765432", type: "deposit", amount: "৳10,000", fee: "৳0", status: "completed", date: "2026-01-22" },
-  { id: "TXN003", user: "করিম উদ্দিন", phone: "01556789012", type: "transfer", amount: "৳2,000", fee: "৳10", status: "completed", date: "2026-01-21" },
-  { id: "TXN004", user: "নাজমা বেগম", phone: "01612345678", type: "bonus", amount: "৳100", fee: "৳0", status: "completed", date: "2026-01-21" },
-  { id: "TXN005", user: "সোহেল রানা", phone: "01812345678", type: "withdrawal", amount: "৳3,500", fee: "৳17", status: "rejected", date: "2026-01-20" },
-  { id: "TXN006", user: "মাহমুদ হাসান", phone: "01912345678", type: "deposit", amount: "৳15,000", fee: "৳0", status: "completed", date: "2026-01-20" },
-  { id: "TXN007", user: "ফারজানা আক্তার", phone: "01312345678", type: "transfer", amount: "৳5,500", fee: "৳27", status: "pending", date: "2026-01-19" },
+  { id: "TXN001", user: "Ahmed Hossain", phone: "01712345678", type: "withdrawal", amount: "$5,000", fee: "$25", status: "pending", date: "2026-01-22" },
+  { id: "TXN002", user: "Rahela Khatun", phone: "01898765432", type: "deposit", amount: "$10,000", fee: "$0", status: "completed", date: "2026-01-22" },
+  { id: "TXN003", user: "Karim Uddin", phone: "01556789012", type: "transfer", amount: "$2,000", fee: "$10", status: "completed", date: "2026-01-21" },
+  { id: "TXN004", user: "Nazma Begum", phone: "01612345678", type: "bonus", amount: "$100", fee: "$0", status: "completed", date: "2026-01-21" },
+  { id: "TXN005", user: "Sohel Rana", phone: "01812345678", type: "withdrawal", amount: "$3,500", fee: "$17", status: "rejected", date: "2026-01-20" },
+  { id: "TXN006", user: "Mahmud Hassan", phone: "01912345678", type: "deposit", amount: "$15,000", fee: "$0", status: "completed", date: "2026-01-20" },
+  { id: "TXN007", user: "Farzana Akter", phone: "01312345678", type: "transfer", amount: "$5,500", fee: "$27", status: "pending", date: "2026-01-19" },
 ];
 
 const typeConfig = {
@@ -148,7 +148,7 @@ const mobileTransactionCard = (row: Transaction, index: number) => {
       {/* Fee & Meta Info */}
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4">
         <span className="bg-muted px-2 py-1 rounded-lg font-mono">{row.id}</span>
-        {row.fee !== "৳0" && (
+        {row.fee !== "$0" && (
           <span className="bg-muted px-2 py-1 rounded-lg">Fee: {row.fee}</span>
         )}
         <span className="ml-auto flex items-center gap-1">
@@ -176,8 +176,8 @@ const Transactions = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MiniStat title="Total Transactions" value="45,678" icon={Activity} variant="info" index={0} />
           <MiniStat title="Today" value="156" icon={TrendingUp} variant="success" index={1} />
-          <MiniStat title="Total Volume" value="৳2.5 Cr" icon={Wallet} variant="warning" index={2} />
-          <MiniStat title="Total Fees" value="৳1,25,000" icon={Gift} variant="info" index={3} />
+          <MiniStat title="Total Volume" value="$2.5M" icon={Wallet} variant="warning" index={2} />
+          <MiniStat title="Total Fees" value="$12,500" icon={Gift} variant="info" index={3} />
         </div>
 
         {/* Table */}

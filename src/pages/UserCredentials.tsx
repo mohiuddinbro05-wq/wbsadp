@@ -21,13 +21,13 @@ interface UserCredential {
 }
 
 const userCredentials: UserCredential[] = [
-  { id: "USR001", name: "আহমেদ হোসেন", email: "ahmed@example.com", phone: "01712345678", password: "Ahmed@123", status: "active", joinDate: "2025-12-15" },
-  { id: "USR002", name: "রাহেলা খাতুন", email: "rahela@example.com", phone: "01898765432", password: "Rahela@456", status: "active", joinDate: "2025-12-20" },
-  { id: "USR003", name: "করিম উদ্দিন", email: "karim@example.com", phone: "01556789012", password: "Karim@789", status: "banned", joinDate: "2025-11-10" },
-  { id: "USR004", name: "নাজমা বেগম", email: "nazma@example.com", phone: "01612345678", password: "Nazma@321", status: "active", joinDate: "2026-01-05" },
-  { id: "USR005", name: "সোহেল রানা", email: "sohel@example.com", phone: "01812345678", password: "Sohel@654", status: "pending", joinDate: "2026-01-20" },
-  { id: "USR006", name: "মাহমুদ হাসান", email: "mahmud@example.com", phone: "01912345678", password: "Mahmud@987", status: "active", joinDate: "2025-10-25" },
-  { id: "USR007", name: "ফারজানা আক্তার", email: "farzana@example.com", phone: "01312345678", password: "Farzana@111", status: "pending", joinDate: "2026-01-21" },
+  { id: "USR001", name: "Ahmed Hossain", email: "ahmed@example.com", phone: "01712345678", password: "Ahmed@123", status: "active", joinDate: "2025-12-15" },
+  { id: "USR002", name: "Rahela Khatun", email: "rahela@example.com", phone: "01898765432", password: "Rahela@456", status: "active", joinDate: "2025-12-20" },
+  { id: "USR003", name: "Karim Uddin", email: "karim@example.com", phone: "01556789012", password: "Karim@789", status: "banned", joinDate: "2025-11-10" },
+  { id: "USR004", name: "Nazma Begum", email: "nazma@example.com", phone: "01612345678", password: "Nazma@321", status: "active", joinDate: "2026-01-05" },
+  { id: "USR005", name: "Sohel Rana", email: "sohel@example.com", phone: "01812345678", password: "Sohel@654", status: "pending", joinDate: "2026-01-20" },
+  { id: "USR006", name: "Mahmud Hassan", email: "mahmud@example.com", phone: "01912345678", password: "Mahmud@987", status: "active", joinDate: "2025-10-25" },
+  { id: "USR007", name: "Farzana Akter", email: "farzana@example.com", phone: "01312345678", password: "Farzana@111", status: "pending", joinDate: "2026-01-21" },
 ];
 
 function PasswordCell({ password }: { password: string }) {
@@ -52,7 +52,7 @@ function PasswordCell({ password }: { password: string }) {
         className="h-7 w-7"
         onClick={() => {
           navigator.clipboard.writeText(password);
-          toast({ title: "কপি হয়েছে", description: "পাসওয়ার্ড কপি করা হয়েছে" });
+          toast({ title: "Copied", description: "Password copied to clipboard" });
         }}
       >
         <Copy className="w-3.5 h-3.5" />
@@ -106,7 +106,7 @@ function CredentialCard({ user }: { user: UserCredential }) {
         <div className="space-y-3 mt-4">
           <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
             <div>
-              <span className="text-xs text-muted-foreground block">ইউজার আইডি</span>
+              <span className="text-xs text-muted-foreground block">User ID</span>
               <span className="font-mono text-sm font-medium">{user.id}</span>
             </div>
             <Button
@@ -115,7 +115,7 @@ function CredentialCard({ user }: { user: UserCredential }) {
               className="h-8 w-8"
               onClick={() => {
                 navigator.clipboard.writeText(user.id);
-                toast({ title: "কপি হয়েছে", description: "ইউজার আইডি কপি করা হয়েছে" });
+                toast({ title: "Copied", description: "User ID copied to clipboard" });
               }}
             >
               <Copy className="w-4 h-4" />
@@ -124,7 +124,7 @@ function CredentialCard({ user }: { user: UserCredential }) {
 
           <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
             <div>
-              <span className="text-xs text-muted-foreground block">পাসওয়ার্ড</span>
+              <span className="text-xs text-muted-foreground block">Password</span>
               <span className="font-mono text-sm font-medium">
                 {showPassword ? user.password : "••••••••"}
               </span>
@@ -144,7 +144,7 @@ function CredentialCard({ user }: { user: UserCredential }) {
                 className="h-8 w-8"
                 onClick={() => {
                   navigator.clipboard.writeText(user.password);
-                  toast({ title: "কপি হয়েছে", description: "পাসওয়ার্ড কপি করা হয়েছে" });
+                  toast({ title: "Copied", description: "Password copied to clipboard" });
                 }}
               >
                 <Copy className="w-4 h-4" />
@@ -153,12 +153,12 @@ function CredentialCard({ user }: { user: UserCredential }) {
           </div>
 
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">ফোন</span>
+            <span className="text-muted-foreground">Phone</span>
             <span className="font-mono">{user.phone}</span>
           </div>
 
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">যোগদান</span>
+            <span className="text-muted-foreground">Joined</span>
             <span>{user.joinDate}</span>
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function UserCredentials() {
             <Key className="w-6 h-6 text-primary" />
             User Credentials
           </h1>
-          <p className="text-muted-foreground">ইউজারদের লগইন তথ্য দেখুন এবং ম্যানেজ করুন</p>
+          <p className="text-muted-foreground">View and manage user login credentials</p>
         </div>
 
         {/* Stats Cards */}
@@ -211,7 +211,7 @@ export default function UserCredentials() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold">{stats.total}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground">মোট ইউজার</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Total Users</p>
               </div>
             </CardContent>
           </Card>
@@ -222,7 +222,7 @@ export default function UserCredentials() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-success">{stats.active}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground">সক্রিয় ইউজার</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Active Users</p>
               </div>
             </CardContent>
           </Card>
@@ -233,7 +233,7 @@ export default function UserCredentials() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-warning">{stats.pending}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground">পেন্ডিং ইউজার</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Pending Users</p>
               </div>
             </CardContent>
           </Card>
@@ -244,7 +244,7 @@ export default function UserCredentials() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-destructive">{stats.banned}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground">ব্যান ইউজার</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Banned Users</p>
               </div>
             </CardContent>
           </Card>
@@ -253,14 +253,14 @@ export default function UserCredentials() {
         {/* Search and Filter */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg">লগইন তথ্য তালিকা</CardTitle>
+            <CardTitle className="text-lg">Credentials List</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-3 mb-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder="ইউজার আইডি, নাম, ইমেইল বা ফোন দিয়ে খুঁজুন..."
+                  placeholder="Search by user ID, name, email or phone..."
                   className="pl-10"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -285,12 +285,12 @@ export default function UserCredentials() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/50">
-                    <TableHead>ইউজার</TableHead>
-                    <TableHead>ইউজার আইডি</TableHead>
-                    <TableHead>পাসওয়ার্ড</TableHead>
-                    <TableHead>ফোন</TableHead>
-                    <TableHead>স্ট্যাটাস</TableHead>
-                    <TableHead>যোগদান</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead>User ID</TableHead>
+                    <TableHead>Password</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Joined</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -316,7 +316,7 @@ export default function UserCredentials() {
                             className="h-7 w-7"
                             onClick={() => {
                               navigator.clipboard.writeText(user.id);
-                              toast({ title: "কপি হয়েছে", description: "ইউজার আইডি কপি করা হয়েছে" });
+                              toast({ title: "Copied", description: "User ID copied to clipboard" });
                             }}
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -347,7 +347,7 @@ export default function UserCredentials() {
             {filteredUsers.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <Key className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>কোনো ইউজার পাওয়া যায়নি</p>
+                <p>No users found</p>
               </div>
             )}
           </CardContent>

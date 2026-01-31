@@ -84,17 +84,17 @@ const transactionTypeData = [
 ];
 
 const paymentMethodData = [
-  { name: "bKash", transactions: 4500, amount: "৳25,00,000" },
-  { name: "Nagad", transactions: 3200, amount: "৳18,50,000" },
-  { name: "Rocket", transactions: 1800, amount: "৳9,20,000" },
-  { name: "Bank", transactions: 950, amount: "৳12,80,000" },
+  { name: "bKash", transactions: 4500, amount: "$25,000" },
+  { name: "Nagad", transactions: 3200, amount: "$18,500" },
+  { name: "Rocket", transactions: 1800, amount: "$9,200" },
+  { name: "Bank", transactions: 950, amount: "$12,800" },
 ];
 
 const quickReports = [
   {
     id: "daily",
     title: "Daily Summary",
-    description: "আজকের সব লেনদেনের সারসংক্ষেপ",
+    description: "Summary of all transactions today",
     icon: FileText,
     lastGenerated: "Today, 11:30 AM",
     status: "ready",
@@ -102,7 +102,7 @@ const quickReports = [
   {
     id: "weekly",
     title: "Weekly Report",
-    description: "সাপ্তাহিক পারফরম্যান্স রিপোর্ট",
+    description: "Weekly performance report",
     icon: BarChart3,
     lastGenerated: "Jan 19, 2026",
     status: "ready",
@@ -110,7 +110,7 @@ const quickReports = [
   {
     id: "monthly",
     title: "Monthly Overview",
-    description: "মাসিক আর্থিক বিশ্লেষণ",
+    description: "Monthly financial analysis",
     icon: PieChart,
     lastGenerated: "Jan 01, 2026",
     status: "ready",
@@ -118,7 +118,7 @@ const quickReports = [
   {
     id: "users",
     title: "User Analytics",
-    description: "ইউজার গ্রোথ ও এনগেজমেন্ট",
+    description: "User growth and engagement",
     icon: Users,
     lastGenerated: "Jan 15, 2026",
     status: "ready",
@@ -137,36 +137,36 @@ const Reports = () => {
   const handleQuickReport = async (reportId: string) => {
     setIsGenerating(reportId);
     toast({
-      title: "রিপোর্ট তৈরি হচ্ছে...",
-      description: "অনুগ্রহ করে অপেক্ষা করুন।",
+      title: "Generating report...",
+      description: "Please wait.",
     });
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsGenerating(null);
     toast({
-      title: "রিপোর্ট প্রস্তুত!",
-      description: "ডাউনলোড শুরু হচ্ছে...",
+      title: "Report ready!",
+      description: "Download starting...",
     });
   };
 
   const handleCustomReport = async () => {
     if (!dateRange.from || !dateRange.to) {
       toast({
-        title: "তারিখ নির্বাচন করুন",
-        description: "শুরু ও শেষ তারিখ নির্বাচন করুন।",
+        title: "Select dates",
+        description: "Please select start and end dates.",
         variant: "destructive",
       });
       return;
     }
     setIsGenerating("custom");
     toast({
-      title: "কাস্টম রিপোর্ট তৈরি হচ্ছে...",
-      description: "এটি কিছু সময় নিতে পারে।",
+      title: "Generating custom report...",
+      description: "This may take a moment.",
     });
     await new Promise((resolve) => setTimeout(resolve, 3000));
     setIsGenerating(null);
     toast({
-      title: "কাস্টম রিপোর্ট প্রস্তুত!",
-      description: "ডাউনলোড শুরু হচ্ছে...",
+      title: "Custom report ready!",
+      description: "Download starting...",
     });
   };
 
@@ -188,7 +188,7 @@ const Reports = () => {
                   <TrendingUp className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400 truncate">৳45.2L</p>
+                  <p className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400 truncate">$45.2K</p>
                   <p className="text-xs text-green-600 dark:text-green-500">Total Deposits</p>
                 </div>
               </div>
@@ -201,7 +201,7 @@ const Reports = () => {
                   <TrendingDown className="w-5 h-5 text-red-600" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xl sm:text-2xl font-bold text-red-700 dark:text-red-400 truncate">৳32.1L</p>
+                  <p className="text-xl sm:text-2xl font-bold text-red-700 dark:text-red-400 truncate">$32.1K</p>
                   <p className="text-xs text-red-600 dark:text-red-500">Total Withdrawals</p>
                 </div>
               </div>
@@ -227,7 +227,7 @@ const Reports = () => {
                   <Wallet className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400 truncate">৳13.1L</p>
+                  <p className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400 truncate">$13.1K</p>
                   <p className="text-xs text-purple-600 dark:text-purple-500">Net Revenue</p>
                 </div>
               </div>
@@ -260,7 +260,7 @@ const Reports = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <div>
                     <CardTitle className="text-lg">Revenue Overview</CardTitle>
-                    <CardDescription>মাসিক ডিপোজিট ও উইথড্র তুলনা</CardDescription>
+                    <CardDescription>Monthly deposits vs withdrawals comparison</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" className="gap-2">
@@ -290,14 +290,14 @@ const Reports = () => {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="name" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
-                      <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => `৳${v / 1000}K`} />
+                      <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => `$${v / 1000}K`} />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
                         }}
-                        formatter={(value: number) => [`৳${value.toLocaleString()}`, ""]}
+                        formatter={(value: number) => [`$${value.toLocaleString()}`, ""]}
                       />
                       <Legend />
                       <Area
@@ -328,10 +328,10 @@ const Reports = () => {
             <div className="grid gap-6 lg:grid-cols-2">
               {/* User Growth */}
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">User Growth</CardTitle>
-                  <CardDescription>নতুন ও অ্যাক্টিভ ইউজার</CardDescription>
-                </CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">User Growth</CardTitle>
+                <CardDescription>New and active users</CardDescription>
+              </CardHeader>
                 <CardContent>
                   <div className="h-[250px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -356,10 +356,10 @@ const Reports = () => {
 
               {/* Transaction Types */}
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Transaction Types</CardTitle>
-                  <CardDescription>লেনদেনের ধরন অনুসারে বিভাজন</CardDescription>
-                </CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Transaction Types</CardTitle>
+                <CardDescription>Distribution by transaction type</CardDescription>
+              </CardHeader>
                 <CardContent>
                   <div className="h-[250px] flex items-center justify-center">
                     <ResponsiveContainer width="100%" height="100%">
@@ -399,7 +399,7 @@ const Reports = () => {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Payment Methods Performance</CardTitle>
-                <CardDescription>পেমেন্ট মেথড অনুসারে লেনদেন</CardDescription>
+                <CardDescription>Transactions by payment method</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
