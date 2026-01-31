@@ -203,10 +203,10 @@ const mockUsers: Record<string, UserData> = {
       { id: "WTH003", amount: 500, method: "bKash", status: "pending", date: "2024-03-20", accountNumber: "01712345678" },
     ],
     activityLog: [
-      { id: "ACT1", action: "লগইন", details: "সফল লগইন", date: "2024-03-20 14:30", ip: "103.56.123.45" },
-      { id: "ACT2", action: "উত্তোলন অনুরোধ", details: "৳500 bKash এ উত্তোলন অনুরোধ", date: "2024-03-20 14:25" },
-      { id: "ACT3", action: "ভিডিও দেখা", details: "8টি ভিডিও দেখে ৳120 আয়", date: "2024-03-20 13:00" },
-      { id: "ACT4", action: "প্যাকেজ কেনা", details: "Premium প্যাকেজ কেনা ৳999", date: "2024-03-15 10:00" },
+      { id: "ACT1", action: "Login", details: "Successful login", date: "2024-03-20 14:30", ip: "103.56.123.45" },
+      { id: "ACT2", action: "Withdrawal Request", details: "$500 withdrawal request via bKash", date: "2024-03-20 14:25" },
+      { id: "ACT3", action: "Videos Watched", details: "Watched 8 videos, earned $120", date: "2024-03-20 13:00" },
+      { id: "ACT4", action: "Package Purchase", details: "Purchased Premium package for $999", date: "2024-03-15 10:00" },
     ],
   },
   "USR002": {
@@ -268,22 +268,22 @@ const mockUsers: Record<string, UserData> = {
       { id: "WTH004", amount: 1000, method: "bKash", status: "approved", date: "2024-03-15", accountNumber: "01812987654", processedBy: "Agent Rahim", processedAt: "2024-03-15 15:00" },
     ],
     activityLog: [
-      { id: "ACT5", action: "লগইন", details: "সফল লগইন", date: "2024-03-19 10:15", ip: "103.56.124.78" },
-      { id: "ACT6", action: "ভিডিও দেখা", details: "5টি ভিডিও দেখে ৳50 আয়", date: "2024-03-19 09:30" },
+      { id: "ACT5", action: "Login", details: "Successful login", date: "2024-03-19 10:15", ip: "103.56.124.78" },
+      { id: "ACT6", action: "Videos Watched", details: "Watched 5 videos, earned $50", date: "2024-03-19 09:30" },
     ],
   },
 };
 
 const statusConfig = {
-  active: { label: "সক্রিয়", color: "bg-green-500/10 text-green-500", icon: CheckCircle },
-  inactive: { label: "নিষ্ক্রিয়", color: "bg-yellow-500/10 text-yellow-500", icon: AlertCircle },
-  banned: { label: "ব্যান", color: "bg-red-500/10 text-red-500", icon: XCircle },
+  active: { label: "Active", color: "bg-green-500/10 text-green-500", icon: CheckCircle },
+  inactive: { label: "Inactive", color: "bg-yellow-500/10 text-yellow-500", icon: AlertCircle },
+  banned: { label: "Banned", color: "bg-red-500/10 text-red-500", icon: XCircle },
 };
 
 const transactionStatusConfig = {
-  pending: { label: "পেন্ডিং", color: "bg-yellow-500/10 text-yellow-500" },
-  approved: { label: "অনুমোদিত", color: "bg-green-500/10 text-green-500" },
-  rejected: { label: "বাতিল", color: "bg-red-500/10 text-red-500" },
+  pending: { label: "Pending", color: "bg-yellow-500/10 text-yellow-500" },
+  approved: { label: "Approved", color: "bg-green-500/10 text-green-500" },
+  rejected: { label: "Rejected", color: "bg-red-500/10 text-red-500" },
 };
 
 export default function History() {
@@ -296,8 +296,8 @@ export default function History() {
   const handleSearch = () => {
     if (!searchQuery.trim()) {
       toast({
-        title: "ত্রুটি",
-        description: "অনুগ্রহ করে ইউজার আইডি লিখুন",
+        title: "Error",
+        description: "Please enter a user ID",
         variant: "destructive",
       });
       return;
@@ -316,8 +316,8 @@ export default function History() {
         setUserData(null);
         setNotFound(true);
         toast({
-          title: "ইউজার পাওয়া যায়নি",
-          description: `"${searchQuery}" আইডি দিয়ে কোনো ইউজার পাওয়া যায়নি`,
+          title: "User not found",
+          description: `No user found with ID "${searchQuery}"`,
           variant: "destructive",
         });
       }
@@ -339,10 +339,10 @@ export default function History() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="w-5 h-5" />
-              ইউজার খুঁজুন
+              Search User
             </CardTitle>
             <CardDescription>
-              ইউজার আইডি দিয়ে সার্চ করে সম্পূর্ণ তথ্য দেখুন
+              Search by user ID to view complete information
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -350,7 +350,7 @@ export default function History() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder="ইউজার আইডি লিখুন (যেমন: USR001)"
+                  placeholder="Enter user ID (e.g., USR001)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -358,11 +358,11 @@ export default function History() {
                 />
               </div>
               <Button onClick={handleSearch} disabled={isSearching}>
-                {isSearching ? "খুঁজছে..." : "সার্চ করুন"}
+                {isSearching ? "Searching..." : "Search"}
               </Button>
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              ডেমো আইডি: USR001, USR002
+              Demo IDs: USR001, USR002
             </p>
           </CardContent>
         </Card>
@@ -372,11 +372,11 @@ export default function History() {
           <Card className="border-destructive/50">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <XCircle className="w-16 h-16 text-destructive mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">ইউজার পাওয়া যায়নি</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-2">User Not Found</h3>
               <p className="text-muted-foreground text-center">
-                "{searchQuery}" আইডি দিয়ে কোনো ইউজার খুঁজে পাওয়া যায়নি।
+                No user found with ID "{searchQuery}".
                 <br />
-                অনুগ্রহ করে সঠিক আইডি দিয়ে আবার চেষ্টা করুন।
+                Please try again with a valid ID.
               </p>
             </CardContent>
           </Card>
@@ -411,11 +411,11 @@ export default function History() {
                           className="h-7 text-xs"
                           onClick={() => {
                             navigator.clipboard.writeText(userData.id);
-                            toast({ title: "কপি হয়েছে", description: "ইউজার আইডি কপি হয়েছে" });
+                            toast({ title: "Copied", description: "User ID copied" });
                           }}
                         >
                           <Copy className="w-3 h-3 mr-1" />
-                          ID কপি
+                          Copy ID
                         </Button>
                       </div>
                     </div>
@@ -428,13 +428,13 @@ export default function History() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <Mail className="w-3.5 h-3.5" /> ইমেইল
+                      <Mail className="w-3.5 h-3.5" /> Email
                     </p>
                     <p className="font-medium truncate">{userData.email}</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <Phone className="w-3.5 h-3.5" /> ফোন
+                      <Phone className="w-3.5 h-3.5" /> Phone
                     </p>
                     <p className="font-medium font-mono">{userData.phone}</p>
                   </div>
@@ -446,13 +446,13 @@ export default function History() {
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5" /> ঠিকানা
+                      <MapPin className="w-3.5 h-3.5" /> Address
                     </p>
                     <p className="font-medium text-xs">{userData.address}</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <Smartphone className="w-3.5 h-3.5" /> ডিভাইস
+                      <Smartphone className="w-3.5 h-3.5" /> Device
                     </p>
                     <p className="font-medium text-xs">{userData.deviceInfo}</p>
                   </div>
@@ -464,13 +464,13 @@ export default function History() {
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5" /> যোগদান
+                      <Calendar className="w-3.5 h-3.5" /> Joined
                     </p>
                     <p className="font-medium">{userData.joinDate}</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" /> সর্বশেষ সক্রিয়
+                      <Clock className="w-3.5 h-3.5" /> Last Active
                     </p>
                     <p className="font-medium">{userData.lastActive}</p>
                   </div>

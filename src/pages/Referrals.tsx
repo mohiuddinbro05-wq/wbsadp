@@ -17,12 +17,12 @@ interface Referral {
 }
 
 const referrals: Referral[] = [
-  { id: "REF001", referrer: "আহমেদ হোসেন", referrerPhone: "01712345678", referred: "মোহাম্মদ আলী", referredPhone: "01812345678", code: "AHMED123", bonus: "৳100", date: "2026-01-22" },
-  { id: "REF002", referrer: "রাহেলা খাতুন", referrerPhone: "01898765432", referred: "ফাতেমা আক্তার", referredPhone: "01556789012", code: "RAHELA456", bonus: "৳100", date: "2026-01-21" },
-  { id: "REF003", referrer: "করিম উদ্দিন", referrerPhone: "01556789012", referred: "জাহিদ হাসান", referredPhone: "01612345678", code: "KARIM789", bonus: "৳100", date: "2026-01-20" },
-  { id: "REF004", referrer: "নাজমা বেগম", referrerPhone: "01612345678", referred: "সাবরিনা ইসলাম", referredPhone: "01912345678", code: "NAZMA012", bonus: "৳100", date: "2026-01-19" },
-  { id: "REF005", referrer: "সোহেল রানা", referrerPhone: "01812345678", referred: "মাহমুদুল হক", referredPhone: "01312345678", code: "SOHEL345", bonus: "৳100", date: "2026-01-18" },
-  { id: "REF006", referrer: "আহমেদ হোসেন", referrerPhone: "01712345678", referred: "রফিক ইসলাম", referredPhone: "01412345678", code: "AHMED123", bonus: "৳100", date: "2026-01-17" },
+  { id: "REF001", referrer: "Ahmed Hossain", referrerPhone: "01712345678", referred: "Mohammad Ali", referredPhone: "01812345678", code: "AHMED123", bonus: "$100", date: "2026-01-22" },
+  { id: "REF002", referrer: "Rahela Khatun", referrerPhone: "01898765432", referred: "Fatema Akter", referredPhone: "01556789012", code: "RAHELA456", bonus: "$100", date: "2026-01-21" },
+  { id: "REF003", referrer: "Karim Uddin", referrerPhone: "01556789012", referred: "Zahid Hassan", referredPhone: "01612345678", code: "KARIM789", bonus: "$100", date: "2026-01-20" },
+  { id: "REF004", referrer: "Nazma Begum", referrerPhone: "01612345678", referred: "Sabrina Islam", referredPhone: "01912345678", code: "NAZMA012", bonus: "$100", date: "2026-01-19" },
+  { id: "REF005", referrer: "Sohel Rana", referrerPhone: "01812345678", referred: "Mahmudul Haque", referredPhone: "01312345678", code: "SOHEL345", bonus: "$100", date: "2026-01-18" },
+  { id: "REF006", referrer: "Ahmed Hossain", referrerPhone: "01712345678", referred: "Rafiq Islam", referredPhone: "01412345678", code: "AHMED123", bonus: "$100", date: "2026-01-17" },
 ];
 
 const copyToClipboard = (text: string) => {
@@ -155,7 +155,7 @@ const Referrals = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <MiniStat title="Total Referrals" value="3,456" icon={Gift} variant="info" index={0} />
           <MiniStat title="This Month" value="234" icon={Users} variant="success" index={1} />
-          <MiniStat title="Total Bonus Paid" value="৳3,45,600" icon={TrendingUp} variant="warning" index={2} />
+          <MiniStat title="Total Bonus Paid" value="$3,456" icon={TrendingUp} variant="warning" index={2} />
         </div>
 
         {/* Table */}

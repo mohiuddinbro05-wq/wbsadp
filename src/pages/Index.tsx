@@ -16,11 +16,11 @@ interface RecentTransaction {
 }
 
 const recentTransactions: RecentTransaction[] = [
-  { id: "TXN001", user: "আহমেদ হোসেন", type: "Withdrawal", amount: "৳5,000", status: "pending", date: "2026-01-22" },
-  { id: "TXN002", user: "রাহেলা খাতুন", type: "Deposit", amount: "৳10,000", status: "completed", date: "2026-01-22" },
-  { id: "TXN003", user: "করিম উদ্দিন", type: "Withdrawal", amount: "৳3,500", status: "approved", date: "2026-01-21" },
-  { id: "TXN004", user: "নাজমা বেগম", type: "Deposit", amount: "৳8,000", status: "completed", date: "2026-01-21" },
-  { id: "TXN005", user: "সোহেল রানা", type: "Withdrawal", amount: "৳2,000", status: "rejected", date: "2026-01-20" },
+  { id: "TXN001", user: "Ahmed Hossain", type: "Withdrawal", amount: "$5,000", status: "pending", date: "2026-01-22" },
+  { id: "TXN002", user: "Rahela Khatun", type: "Deposit", amount: "$10,000", status: "completed", date: "2026-01-22" },
+  { id: "TXN003", user: "Karim Uddin", type: "Withdrawal", amount: "$3,500", status: "approved", date: "2026-01-21" },
+  { id: "TXN004", user: "Nazma Begum", type: "Deposit", amount: "$8,000", status: "completed", date: "2026-01-21" },
+  { id: "TXN005", user: "Sohel Rana", type: "Withdrawal", amount: "$2,000", status: "rejected", date: "2026-01-20" },
 ];
 
 const columns: Column<RecentTransaction>[] = [
@@ -108,9 +108,9 @@ const Index = () => {
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full" />
           <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white/5 rounded-full" />
           <div className="relative">
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">স্বাগতম, Admin! 👋</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome, Admin! 👋</h1>
             <p className="text-white/80 text-sm md:text-base max-w-xl">
-              আজকের সামগ্রিক পরিস্থিতি দেখুন এবং সব কিছু নিয়ন্ত্রণ করুন।
+              View today's overview and manage everything from here.
             </p>
           </div>
         </div>
@@ -128,7 +128,7 @@ const Index = () => {
           />
           <StatCard
             title="Total Deposits"
-            value="৳45,23,000"
+            value="$452,300"
             change="+8% from last month"
             changeType="positive"
             icon={TrendingUp}
@@ -137,7 +137,7 @@ const Index = () => {
           />
           <StatCard
             title="Total Withdrawals"
-            value="৳32,15,000"
+            value="$321,500"
             change="+5% from last month"
             changeType="neutral"
             icon={TrendingDown}
@@ -146,7 +146,7 @@ const Index = () => {
           />
           <StatCard
             title="Net Balance"
-            value="৳13,08,000"
+            value="$130,800"
             change="+15% from last month"
             changeType="positive"
             icon={DollarSign}
@@ -166,7 +166,7 @@ const Index = () => {
           />
           <MiniStat
             title="Today's Deposits"
-            value="৳1,25,000"
+            value="$12,500"
             icon={TrendingUp}
             variant="success"
             index={1}
