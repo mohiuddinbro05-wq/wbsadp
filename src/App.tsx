@@ -19,6 +19,10 @@ import NotFound from "./pages/NotFound";
 import History from "./pages/History";
 import Requests from "./pages/Requests";
 import UserCredentials from "./pages/UserCredentials";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import Terms from "./pages/Terms";
+import Salary from "./pages/Salary";
 
 // Editor Pages
 import HeroEditor from "./pages/editor/HeroEditor";
@@ -58,6 +62,10 @@ const App = () => (
           <Route path="/history" element={<History />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/user-credentials" element={<UserCredentials />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/salary" element={<Salary />} />
           
           {/* Editor Routes */}
           <Route path="/editor/hero" element={<HeroEditor />} />
