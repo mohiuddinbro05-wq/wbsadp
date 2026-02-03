@@ -32,6 +32,8 @@ import {
   History,
   ClipboardList,
   Key,
+  FileQuestion,
+  DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -107,8 +109,10 @@ const menuSections: MenuSection[] = [
     items: [
       { title: "Payment Methods", icon: Wallet, path: "/payment-methods" },
       { title: "Referrals", icon: Gift, path: "/referrals" },
+      { title: "Salary", icon: DollarSign, path: "/salary" },
       { title: "Transactions", icon: CreditCard, path: "/transactions" },
       { title: "Reports", icon: FileText, path: "/reports" },
+      { title: "Terms", icon: FileQuestion, path: "/terms" },
     ],
   },
   {

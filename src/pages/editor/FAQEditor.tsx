@@ -21,25 +21,35 @@ export default function FAQEditor() {
   const [faqs, setFaqs] = useState<FAQ[]>([
     { 
       id: "1", 
-      question: "কিভাবে আয় শুরু করব?", 
-      answer: "প্রথমে রেজিস্ট্রেশন করুন, তারপর ভিডিও দেখা শুরু করুন। প্রতিটি ভিডিও দেখলে আপনার একাউন্টে টাকা জমা হবে।"
+      question: "How do I start earning?", 
+      answer: "First register, then start watching videos. Each video you watch will credit money to your account."
     },
     { 
       id: "2", 
-      question: "উইথড্রয়াল কিভাবে করব?", 
-      answer: "আপনার প্রোফাইল থেকে উইথড্রয়াল অপশনে গিয়ে আপনার পছন্দের পেমেন্ট মেথড সিলেক্ট করুন।"
+      question: "How do I withdraw?", 
+      answer: "Go to the withdrawal option from your profile and select your preferred payment method."
     },
     { 
       id: "3", 
-      question: "মিনিমাম উইথড্রয়াল কত?", 
-      answer: "মিনিমাম উইথড্রয়াল ৫০০ টাকা। এই পরিমাণ জমা হলে আপনি উইথড্রয়াল করতে পারবেন।"
+      question: "What is the minimum withdrawal?", 
+      answer: "The minimum withdrawal is $500. You can withdraw once this amount is accumulated."
+    },
+    { 
+      id: "4", 
+      question: "How long does withdrawal take?", 
+      answer: "Withdrawals are processed within 24-48 hours on business days."
+    },
+    { 
+      id: "5", 
+      question: "How does the referral program work?", 
+      answer: "Share your referral code with friends. When they join and make a deposit, you earn commission based on the tiered structure."
     },
   ]);
 
   const handleSave = () => {
     toast({
-      title: "সফল!",
-      description: "FAQ section সফলভাবে আপডেট হয়েছে।",
+      title: "Success!",
+      description: "FAQ section has been updated. Changes are synced to Terms page.",
     });
   };
 
@@ -62,7 +72,7 @@ export default function FAQEditor() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground">FAQ Editor</h1>
-            <p className="text-muted-foreground">প্রশ্ন ও উত্তর সেকশন এডিট করুন</p>
+            <p className="text-muted-foreground">Edit FAQ section (synced with Terms page)</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline">
@@ -92,7 +102,7 @@ export default function FAQEditor() {
         <Card>
           <CardHeader>
             <CardTitle>FAQ Items</CardTitle>
-            <CardDescription>প্রশ্ন ও উত্তরগুলো এডিট করুন</CardDescription>
+            <CardDescription>Edit questions and answers (changes sync to Terms page)</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {faqs.map((faq, index) => (
