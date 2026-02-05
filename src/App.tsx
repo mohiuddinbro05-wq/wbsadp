@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 
 // User Pages
 import LandingPage from "./pages/user/LandingPage";
@@ -46,20 +47,44 @@ import Agents from "./pages/team/Agents";
 import SupportTeam from "./pages/team/SupportTeam";
 import Moderators from "./pages/team/Moderators";
 
+ // Protected Route Component
+ function ProtectedRoute({ children }: { children: React.ReactNode }) {
+   const { user, loading } = useAuth();
+   
+   if (loading) {
+     return (
+       <div className="min-h-screen flex items-center justify-center">
+         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+       </div>
+     );
+   }
+   
+   if (!user) {
+     return <Navigate to="/login" replace />;
+   }
+   
+   return <>{children}</>;
+ }
+ 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* User Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<UserLogin />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
+     <BrowserRouter>
+       <AuthProvider>
+         <TooltipProvider>
+           <Toaster />
+           <Sonner />
+           <Routes>
+             {/* User Routes */}
+             <Route path="/" element={<LandingPage />} />
+             <Route path="/login" element={<UserLogin />} />
+             <Route path="/register" element={<Register />} />
+             <Route path="/dashboard" element={
+               <ProtectedRoute>
+                 <UserDashboard />
+               </ProtectedRoute>
+             } />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
@@ -96,11 +121,12 @@ const App = () => (
           <Route path="/admin/team/support" element={<SupportTeam />} />
           <Route path="/admin/team/moderators" element={<Moderators />} />
           
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+             <Route path="*" element={<NotFound />} />
+           </Routes>
+         </TooltipProvider>
+       </AuthProvider>
+     </BrowserRouter>
   </QueryClientProvider>
 );
 
