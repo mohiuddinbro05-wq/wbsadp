@@ -1,243 +1,221 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Link } from "react-router-dom";
-import { 
-  Play, 
-  Wallet, 
-  Users, 
-  TrendingUp, 
-  PlayCircle, 
-  ArrowUpRight,
-  Bell,
-  Settings,
-  LogOut,
-  Gift,
-  Clock,
-  CheckCircle2
-} from "lucide-react";
-
-const userStats = {
-  balance: "৳12,450",
-  todayEarnings: "৳450",
-  totalEarnings: "৳45,680",
-  referrals: 12,
-  videosToday: 15,
-  videosCompleted: 8,
-  plan: "Premium"
-};
-
-const recentTransactions = [
-  { id: 1, type: "earning", description: "Video watched - Tech Review", amount: "+৳25", time: "2 min ago" },
-  { id: 2, type: "earning", description: "Video watched - Gaming", amount: "+৳25", time: "15 min ago" },
-  { id: 3, type: "referral", description: "Referral bonus - Karim", amount: "+৳150", time: "1 hour ago" },
-  { id: 4, type: "withdrawal", description: "Withdrawal to bKash", amount: "-৳5,000", time: "Yesterday" },
-];
-
-const availableVideos = [
-  { id: 1, title: "Tech Product Review", duration: "3:45", reward: "৳25", thumbnail: "🎬" },
-  { id: 2, title: "Mobile Gaming Highlights", duration: "2:30", reward: "৳25", thumbnail: "🎮" },
-  { id: 3, title: "Cooking Tutorial", duration: "4:15", reward: "৳25", thumbnail: "🍳" },
-  { id: 4, title: "Travel Vlog Bangladesh", duration: "5:00", reward: "৳25", thumbnail: "✈️" },
-];
-
-export default function UserDashboard() {
-  const progressPercent = (userStats.videosCompleted / userStats.videosToday) * 100;
-
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-                <Play className="w-5 h-5 text-primary-foreground fill-current" />
-              </div>
-              <span className="text-xl font-bold text-foreground">EarnTube</span>
-            </Link>
-            
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">3</span>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Settings className="w-5 h-5" />
-              </Button>
-              <Link to="/login">
-                <Button variant="ghost" size="icon">
-                  <LogOut className="w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground mb-1">Welcome back, Rahim! 👋</h1>
-          <p className="text-muted-foreground">Here's your earning overview for today</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card className="card-hover">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Wallet className="w-5 h-5 text-primary" />
-                </div>
-                <span className="text-xs text-muted-foreground">{userStats.plan}</span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{userStats.balance}</p>
-              <p className="text-sm text-muted-foreground">Current Balance</p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-hover">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-accent/20">
-                  <TrendingUp className="w-5 h-5 text-accent" />
-                </div>
-                <span className="text-xs text-success flex items-center gap-1">
-                  <ArrowUpRight className="w-3 h-3" /> 12%
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{userStats.todayEarnings}</p>
-              <p className="text-sm text-muted-foreground">Today's Earnings</p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-hover">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-success/10">
-                  <Gift className="w-5 h-5 text-success" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{userStats.totalEarnings}</p>
-              <p className="text-sm text-muted-foreground">Total Earnings</p>
-            </CardContent>
-          </Card>
-
-          <Card className="card-hover">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-info/10">
-                  <Users className="w-5 h-5 text-info" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{userStats.referrals}</p>
-              <p className="text-sm text-muted-foreground">Total Referrals</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Daily Progress */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <PlayCircle className="w-5 h-5 text-primary" />
-                Daily Video Progress
-              </CardTitle>
-              <CardDescription>
-                Complete all videos to maximize your earnings
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">{userStats.videosCompleted} of {userStats.videosToday} videos completed</span>
-                  <span className="text-sm text-primary font-medium">{Math.round(progressPercent)}%</span>
-                </div>
-                <Progress value={progressPercent} className="h-3" />
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                {availableVideos.map((video) => (
-                  <div key={video.id} className="flex items-center gap-4 p-4 rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer">
-                    <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center text-2xl">
-                      {video.thumbnail}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-foreground truncate">{video.title}</p>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {video.duration}
-                        </span>
-                        <span className="text-primary font-medium">{video.reward}</span>
-                      </div>
-                    </div>
-                    <Button size="sm" variant="outline">
-                      <Play className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>Your latest transactions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentTransactions.map((tx) => (
-                  <div key={tx.id} className="flex items-start gap-3">
-                    <div className={`p-2 rounded-full ${
-                      tx.type === 'earning' ? 'bg-success/10 text-success' :
-                      tx.type === 'referral' ? 'bg-info/10 text-info' :
-                      'bg-destructive/10 text-destructive'
-                    }`}>
-                      {tx.type === 'earning' ? <PlayCircle className="w-4 h-4" /> :
-                       tx.type === 'referral' ? <Users className="w-4 h-4" /> :
-                       <Wallet className="w-4 h-4" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{tx.description}</p>
-                      <p className="text-xs text-muted-foreground">{tx.time}</p>
-                    </div>
-                    <span className={`text-sm font-medium ${
-                      tx.amount.startsWith('+') ? 'text-success' : 'text-destructive'
-                    }`}>
-                      {tx.amount}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              
-              <Button variant="ghost" className="w-full mt-4">
-                View All Transactions
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid sm:grid-cols-3 gap-4 mt-6">
-          <Button className="h-auto py-4 flex-col gap-2" variant="outline">
-            <Wallet className="w-6 h-6" />
-            <span>Withdraw Funds</span>
-          </Button>
-          <Button className="h-auto py-4 flex-col gap-2" variant="outline">
-            <Users className="w-6 h-6" />
-            <span>Invite Friends</span>
-          </Button>
-          <Button className="h-auto py-4 flex-col gap-2" variant="outline">
-            <TrendingUp className="w-6 h-6" />
-            <span>Upgrade Plan</span>
-          </Button>
-        </div>
-      </main>
-    </div>
-  );
-}
+ import { Card, CardContent } from "@/components/ui/card";
+ import { Button } from "@/components/ui/button";
+ import { Link } from "react-router-dom";
+ import { 
+   Play, 
+   Wallet, 
+   Gift,
+   ArrowUpRight,
+   LogOut,
+   Bell,
+   Video,
+   Sparkles,
+   Clock,
+   Users
+ } from "lucide-react";
+ import UserLayout from "@/components/user/UserLayout";
+ import { useAuth } from "@/hooks/useAuth";
+ 
+ export default function UserDashboard() {
+   const { user, signOut } = useAuth();
+   const userName = user?.user_metadata?.full_name || "User";
+ 
+   return (
+     <UserLayout>
+       {/* Header */}
+       <header className="sticky top-0 z-40 bg-background border-b border-border">
+         <div className="flex items-center justify-between px-4 h-14">
+           <div className="flex items-center gap-2">
+             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+               <Play className="w-4 h-4 text-primary-foreground fill-current" />
+             </div>
+             <span className="text-lg font-bold">EarnTube</span>
+           </div>
+           <Button variant="ghost" size="icon" onClick={signOut}>
+             <LogOut className="w-5 h-5" />
+           </Button>
+         </div>
+       </header>
+ 
+       <main className="px-4 py-4 space-y-4">
+         {/* Welcome Section */}
+         <div className="flex items-center justify-between">
+           <div>
+             <h1 className="text-xl font-bold">স্বাগতম, {userName}!</h1>
+             <p className="text-sm text-muted-foreground">আজকে ভিডিও দেখে আয় করুন</p>
+           </div>
+           <span className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+             ⭐ Standard
+           </span>
+         </div>
+ 
+         {/* Balance Card */}
+         <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground border-0 overflow-hidden relative">
+           <CardContent className="p-5">
+             <div className="flex items-center justify-between mb-4">
+               <div>
+                 <p className="text-sm opacity-90">মোট ব্যালেন্স</p>
+                 <p className="text-4xl font-bold">৳৮০</p>
+               </div>
+               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                 <Wallet className="w-6 h-6" />
+               </div>
+             </div>
+             <div className="flex gap-3">
+               <div className="flex-1 bg-white/10 rounded-lg p-3">
+                 <div className="flex items-center gap-2 mb-1">
+                   <ArrowUpRight className="w-4 h-4" />
+                   <span className="text-xs opacity-80">আজকের আয়</span>
+                 </div>
+                 <p className="text-lg font-bold">৳০</p>
+               </div>
+               <div className="flex-1 bg-white/10 rounded-lg p-3">
+                 <div className="flex items-center gap-2 mb-1">
+                   <Video className="w-4 h-4" />
+                   <span className="text-xs opacity-80">মোট ভিডিও</span>
+                 </div>
+                 <p className="text-lg font-bold">৪টি</p>
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+ 
+         {/* Quick Actions */}
+         <div>
+           <h3 className="text-base font-semibold mb-3">দ্রুত অ্যাকশন</h3>
+           <div className="grid grid-cols-2 gap-3">
+             <Link to="/videos">
+               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+                 <CardContent className="p-4 flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                     <Play className="w-5 h-5 text-primary" />
+                   </div>
+                   <div>
+                     <p className="font-medium text-sm">ভিডিও দেখুন</p>
+                     <p className="text-xs text-muted-foreground">আয় করুন</p>
+                   </div>
+                 </CardContent>
+               </Card>
+             </Link>
+             <Link to="/wallet">
+               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+                 <CardContent className="p-4 flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                     <Wallet className="w-5 h-5 text-blue-600" />
+                   </div>
+                   <div>
+                     <p className="font-medium text-sm">উইথড্র</p>
+                     <p className="text-xs text-muted-foreground">টাকা তুলুন</p>
+                   </div>
+                 </CardContent>
+               </Card>
+             </Link>
+             <Link to="/refer">
+               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+                 <CardContent className="p-4 flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                     <Gift className="w-5 h-5 text-primary" />
+                   </div>
+                   <div>
+                     <p className="font-medium text-sm">রেফার করুন</p>
+                     <p className="text-xs text-muted-foreground">বোনাস পান</p>
+                   </div>
+                 </CardContent>
+               </Card>
+             </Link>
+             <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+               <CardContent className="p-4 flex items-center gap-3">
+                 <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+                   <ArrowUpRight className="w-5 h-5 text-orange-600" />
+                 </div>
+                 <div>
+                   <p className="font-medium text-sm">ডিপোজিট</p>
+                   <p className="text-xs text-muted-foreground">টাকা যোগ করুন</p>
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+         </div>
+ 
+         {/* Current Plan */}
+         <Card>
+           <CardContent className="p-4">
+             <div className="flex items-center justify-between mb-3">
+               <div className="flex items-center gap-2">
+                 <Sparkles className="w-5 h-5 text-primary" />
+                 <span className="font-semibold">Standard প্ল্যান</span>
+               </div>
+               <Button variant="outline" size="sm" className="text-xs">
+                 আপগ্রেড
+               </Button>
+             </div>
+             <div className="grid grid-cols-3 gap-4 text-center">
+               <div>
+                 <p className="text-xl font-bold text-primary">20</p>
+                 <p className="text-xs text-muted-foreground">ভিডিও/দিন</p>
+               </div>
+               <div>
+                 <p className="text-xl font-bold text-primary">৳20</p>
+                 <p className="text-xs text-muted-foreground">প্রতি ভিডিও</p>
+               </div>
+               <div>
+                 <p className="text-xl font-bold text-primary">৳12,000</p>
+                 <p className="text-xs text-muted-foreground">মাসিক</p>
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+ 
+         {/* Tips */}
+         <Card className="bg-primary/5 border-primary/20">
+           <CardContent className="p-4">
+             <div className="flex items-center gap-2 mb-3">
+               <Sparkles className="w-5 h-5 text-primary" />
+               <span className="font-semibold">টিপস</span>
+             </div>
+             <div className="space-y-2 text-sm">
+               <div className="flex items-center gap-2 text-muted-foreground">
+                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                 প্রতিদিন সব ভিডিও দেখলে বেশি আয় হবে
+               </div>
+               <div className="flex items-center gap-2 text-muted-foreground">
+                 <Users className="w-4 h-4 text-primary" />
+                 বন্ধুদের রেফার করে বোনাস পান
+               </div>
+               <div className="flex items-center gap-2 text-muted-foreground">
+                 <Clock className="w-4 h-4 text-primary" />
+                 ভিডিও দেখার সময় পজ করবেন না
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+ 
+         {/* Announcements */}
+         <Card>
+           <CardContent className="p-4">
+             <div className="flex items-center gap-2 mb-3">
+               <Bell className="w-5 h-5 text-muted-foreground" />
+               <span className="font-semibold">ঘোষণা</span>
+             </div>
+             <div className="space-y-3">
+               <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                 <Gift className="w-5 h-5 text-primary mt-0.5" />
+                 <div>
+                   <p className="font-medium text-sm">রেফারাল বোনাস বাড়ানো হয়েছে!</p>
+                   <p className="text-xs text-muted-foreground">এখন প্রতি রেফারালে আরো বেশি বোনাস পাবেন।</p>
+                 </div>
+               </div>
+               <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                 <Video className="w-5 h-5 text-blue-500 mt-0.5" />
+                 <div>
+                   <p className="font-medium text-sm">নতুন ভিডিও যোগ করা হয়েছে</p>
+                   <p className="text-xs text-muted-foreground">আরো বেশি ভিডিও দেখে আয় করুন।</p>
+                 </div>
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+       </main>
+     </UserLayout>
+   );
+ }

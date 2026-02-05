@@ -10,6 +10,10 @@ import LandingPage from "./pages/user/LandingPage";
 import UserLogin from "./pages/user/UserLogin";
 import Register from "./pages/user/Register";
 import UserDashboard from "./pages/user/UserDashboard";
+ import VideosPage from "./pages/user/VideosPage";
+ import WalletPage from "./pages/user/WalletPage";
+ import ReferPage from "./pages/user/ReferPage";
+ import ProfilePage from "./pages/user/ProfilePage";
 
 // Admin Pages
 import AdminDashboard from "./pages/Index";
@@ -85,6 +89,26 @@ const App = () => (
                  <UserDashboard />
                </ProtectedRoute>
              } />
+               <Route path="/videos" element={
+                 <ProtectedRoute>
+                   <VideosPage />
+                 </ProtectedRoute>
+               } />
+               <Route path="/wallet" element={
+                 <ProtectedRoute>
+                   <WalletPage />
+                 </ProtectedRoute>
+               } />
+               <Route path="/refer" element={
+                 <ProtectedRoute>
+                   <ReferPage />
+                 </ProtectedRoute>
+               } />
+               <Route path="/profile" element={
+                 <ProtectedRoute>
+                   <ProfilePage />
+                 </ProtectedRoute>
+               } />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
