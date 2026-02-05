@@ -2,15 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+ import { Link, useNavigate } from "react-router-dom";
+ import { useState, useEffect } from "react";
 import { Play, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+ import { useToast } from "@/hooks/use-toast";
+ import { useAuth } from "@/hooks/useAuth";
 
 export default function Register() {
   const { toast } = useToast();
+   const { signUp, user, loading } = useAuth();
+   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,7 +24,13 @@ export default function Register() {
     referralCode: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+   useEffect(() => {
+     if (!loading && user) {
+       navigate('/dashboard');
+     }
+   }, [user, loading, navigate]);
+ 
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
@@ -32,10 +42,27 @@ export default function Register() {
       return;
     }
 
-    toast({
-      title: "Registration Successful!",
-      description: "Welcome to EarnTube! Please check your email to verify your account.",
-    });
+     setIsSubmitting(true);
+ 
+     const { error } = await signUp(formData.email, formData.password, {
+       full_name: formData.name,
+       phone: formData.phone,
+       referral_code: formData.referralCode,
+     });
+ 
+     if (error) {
+       toast({
+         title: "Registration Failed",
+         description: error.message,
+         variant: "destructive",
+       });
+       setIsSubmitting(false);
+     } else {
+       toast({
+         title: "Registration Successful!",
+         description: "Please check your email to verify your account.",
+       });
+     }
   };
 
   return (
@@ -144,8 +171,8 @@ export default function Register() {
                 />
               </div>
 
-              <Button type="submit" className="w-full h-11">
-                Create Account
+               <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+                 {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">

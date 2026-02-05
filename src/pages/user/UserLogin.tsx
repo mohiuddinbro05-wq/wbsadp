@@ -2,26 +2,49 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+ import { Link, useNavigate } from "react-router-dom";
+ import { useState, useEffect } from "react";
 import { Play, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+ import { useToast } from "@/hooks/use-toast";
+ import { useAuth } from "@/hooks/useAuth";
 
 export default function UserLogin() {
   const { toast } = useToast();
+   const { signIn, user, loading } = useAuth();
+   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+   useEffect(() => {
+     if (!loading && user) {
+       navigate('/dashboard');
+     }
+   }, [user, loading, navigate]);
+ 
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    toast({
-      title: "Login Successful!",
-      description: "Welcome back to EarnTube!",
-    });
+     setIsSubmitting(true);
+ 
+     const { error } = await signIn(formData.email, formData.password);
+ 
+     if (error) {
+       toast({
+         title: "Login Failed",
+         description: error.message,
+         variant: "destructive",
+       });
+       setIsSubmitting(false);
+     } else {
+       toast({
+         title: "Login Successful!",
+         description: "Welcome back to EarnTube!",
+       });
+       navigate('/dashboard');
+     }
   };
 
   return (
@@ -80,8 +103,8 @@ export default function UserLogin() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-11">
-                Login
+               <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+                 {isSubmitting ? "Logging in..." : "Login"}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">
