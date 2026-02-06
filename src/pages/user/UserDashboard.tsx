@@ -80,62 +80,64 @@
            </CardContent>
          </Card>
  
-         {/* Quick Actions */}
-         <div>
-           <h3 className="text-base font-semibold mb-3">দ্রুত অ্যাকশন</h3>
-           <div className="grid grid-cols-2 gap-3">
-             <Link to="/videos">
-               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-                 <CardContent className="p-4 flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                     <Play className="w-5 h-5 text-primary" />
-                   </div>
-                   <div>
-                     <p className="font-medium text-sm">ভিডিও দেখুন</p>
-                     <p className="text-xs text-muted-foreground">আয় করুন</p>
-                   </div>
-                 </CardContent>
-               </Card>
-             </Link>
-             <Link to="/wallet">
-               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-                 <CardContent className="p-4 flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                     <Wallet className="w-5 h-5 text-blue-600" />
-                   </div>
-                   <div>
-                     <p className="font-medium text-sm">উইথড্র</p>
-                     <p className="text-xs text-muted-foreground">টাকা তুলুন</p>
-                   </div>
-                 </CardContent>
-               </Card>
-             </Link>
-             <Link to="/refer">
-               <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-                 <CardContent className="p-4 flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                     <Gift className="w-5 h-5 text-primary" />
-                   </div>
-                   <div>
-                     <p className="font-medium text-sm">রেফার করুন</p>
-                     <p className="text-xs text-muted-foreground">বোনাস পান</p>
-                   </div>
-                 </CardContent>
-               </Card>
-             </Link>
-             <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-               <CardContent className="p-4 flex items-center gap-3">
-                 <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-                   <ArrowUpRight className="w-5 h-5 text-orange-600" />
-                 </div>
-                 <div>
-                   <p className="font-medium text-sm">ডিপোজিট</p>
-                   <p className="text-xs text-muted-foreground">টাকা যোগ করুন</p>
-                 </div>
-               </CardContent>
-             </Card>
-           </div>
-         </div>
+          {/* Quick Actions */}
+          <div>
+            <h3 className="text-base font-semibold mb-3">দ্রুত অ্যাকশন</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <Link to="/videos">
+                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Play className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">ভিডিও দেখুন</p>
+                      <p className="text-xs text-muted-foreground truncate">আয় করুন</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to="/wallet">
+                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+                      <Wallet className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">উইথড্র</p>
+                      <p className="text-xs text-muted-foreground truncate">টাকা তুলুন</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to="/refer">
+                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Gift className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">রেফার করুন</p>
+                      <p className="text-xs text-muted-foreground truncate">বোনাস পান</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to="/wallet?tab=deposit">
+                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                      <ArrowUpRight className="w-5 h-5 text-orange-500" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">ডিপোজিট</p>
+                      <p className="text-xs text-muted-foreground truncate">টাকা যোগ করুন</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
  
          {/* Current Plan */}
          <Card>
