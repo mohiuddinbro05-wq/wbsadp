@@ -34,6 +34,7 @@ import {
   Key,
   FileQuestion,
   DollarSign,
+  Megaphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -118,6 +119,7 @@ const menuSections: MenuSection[] = [
   {
     label: "SYSTEM",
     items: [
+      { title: "Announcements", icon: Megaphone, path: "/admin/announcements" },
       { title: "Notifications", icon: Bell, path: "/admin/notifications", badge: 5 },
       { title: "Settings", icon: Settings, path: "/admin/settings" },
     ],

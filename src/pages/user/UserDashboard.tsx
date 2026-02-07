@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -12,18 +13,78 @@ import {
   Sparkles,
   Clock,
   Users,
-  Loader2
+  Loader2,
+  ChevronRight
 } from "lucide-react";
 import UserLayout from "@/components/user/UserLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
+import DepositDialog from "@/components/user/DepositDialog";
+import UpgradePlanDialog from "@/components/user/UpgradePlanDialog";
+import AnnouncementDialog from "@/components/user/AnnouncementDialog";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  icon: string;
+  icon_color: string;
+  created_at: string;
+}
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  bell: Bell,
+  gift: Gift,
+  video: Video,
+};
+
+const colorMap: Record<string, string> = {
+  primary: "text-primary",
+  blue: "text-blue-500",
+  green: "text-green-500",
+  red: "text-red-500",
+  orange: "text-orange-500",
+  purple: "text-purple-500",
+};
 
 export default function UserDashboard() {
   const { signOut } = useAuth();
   const { profile, loading } = useProfile();
   
+  const [depositOpen, setDepositOpen] = useState(false);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [announcementDialogOpen, setAnnouncementDialogOpen] = useState(false);
+  
   const userName = profile?.full_name || "User";
   const balance = profile?.balance || 0;
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (error) throw error;
+      setAnnouncements(data || []);
+    } catch (err) {
+      console.error('Error fetching announcements:', err);
+    }
+  };
+
+  const handleAnnouncementClick = (announcement: Announcement) => {
+    setSelectedAnnouncement(announcement);
+    setAnnouncementDialogOpen(true);
+  };
 
   return (
     <UserLayout>
@@ -130,7 +191,7 @@ export default function UserDashboard() {
                  </CardContent>
                </Card>
              </Link>
-             <Link to="/wallet?tab=deposit">
+             <div onClick={() => setDepositOpen(true)}>
                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
                  <CardContent className="p-4 flex items-center gap-3">
                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
@@ -142,7 +203,7 @@ export default function UserDashboard() {
                    </div>
                  </CardContent>
                </Card>
-             </Link>
+             </div>
            </div>
          </div>
 
@@ -154,11 +215,14 @@ export default function UserDashboard() {
                 <Sparkles className="w-5 h-5 text-primary" />
                 <span className="font-semibold">Standard প্ল্যান</span>
               </div>
-              <Link to="/wallet?tab=deposit">
-                <Button variant="outline" size="sm" className="text-xs">
-                  আপগ্রেড
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-xs"
+                onClick={() => setUpgradeOpen(true)}
+              >
+                আপগ্রেড
+              </Button>
             </div>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
@@ -209,24 +273,46 @@ export default function UserDashboard() {
               <span className="font-semibold">ঘোষণা</span>
             </div>
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                <Gift className="w-5 h-5 text-primary mt-0.5" />
-                <div>
-                  <p className="font-medium text-sm">রেফারাল বোনাস বাড়ানো হয়েছে!</p>
-                  <p className="text-xs text-muted-foreground">এখন প্রতি রেফারালে আরো বেশি বোনাস পাবেন।</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                <Video className="w-5 h-5 text-blue-500 mt-0.5" />
-                <div>
-                  <p className="font-medium text-sm">নতুন ভিডিও যোগ করা হয়েছে</p>
-                  <p className="text-xs text-muted-foreground">আরো বেশি ভিডিও দেখে আয় করুন।</p>
-                </div>
-              </div>
+              {announcements.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  কোনো ঘোষণা নেই
+                </p>
+              ) : (
+                announcements.map((announcement) => {
+                  const IconComponent = iconMap[announcement.icon] || Bell;
+                  const iconColor = colorMap[announcement.icon_color] || "text-primary";
+                  
+                  return (
+                    <div 
+                      key={announcement.id}
+                      onClick={() => handleAnnouncementClick(announcement)}
+                      className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                    >
+                      <IconComponent className={`w-5 h-5 ${iconColor} mt-0.5 shrink-0`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm">{announcement.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-1">
+                          {announcement.content}
+                        </p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                    </div>
+                  );
+                })
+              )}
             </div>
           </CardContent>
         </Card>
       </main>
+
+      {/* Dialogs */}
+      <DepositDialog open={depositOpen} onOpenChange={setDepositOpen} />
+      <UpgradePlanDialog open={upgradeOpen} onOpenChange={setUpgradeOpen} currentPlan="Standard" />
+      <AnnouncementDialog 
+        open={announcementDialogOpen} 
+        onOpenChange={setAnnouncementDialogOpen} 
+        announcement={selectedAnnouncement}
+      />
     </UserLayout>
   );
 }

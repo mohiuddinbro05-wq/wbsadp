@@ -36,6 +36,7 @@ import Requests from "./pages/Requests";
 import UserCredentials from "./pages/UserCredentials";
 import Terms from "./pages/Terms";
 import Salary from "./pages/Salary";
+import Announcements from "./pages/Announcements";
 
 // Editor Pages
 import HeroEditor from "./pages/editor/HeroEditor";
@@ -130,6 +131,7 @@ const App = () => (
           <Route path="/admin/user-credentials" element={<UserCredentials />} />
           <Route path="/admin/terms" element={<Terms />} />
           <Route path="/admin/salary" element={<Salary />} />
+          <Route path="/admin/announcements" element={<Announcements />} />
           
           {/* Editor Routes */}
           <Route path="/admin/editor/hero" element={<HeroEditor />} />
