@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          content: string
+          created_at: string
+          icon: string | null
+          icon_color: string | null
+          id: string
+          is_active: boolean | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          icon?: string | null
+          icon_color?: string | null
+          id?: string
+          is_active?: boolean | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          icon?: string | null
+          icon_color?: string | null
+          id?: string
+          is_active?: boolean | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           balance: number | null
@@ -47,6 +80,48 @@ export type Database = {
           referred_by?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          earning_per_video: number
+          features: string[] | null
+          id: string
+          is_active: boolean | null
+          monthly_earning: number
+          name: string
+          price: number
+          sort_order: number | null
+          updated_at: string
+          videos_per_day: number
+        }
+        Insert: {
+          created_at?: string
+          earning_per_video?: number
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          monthly_earning?: number
+          name: string
+          price?: number
+          sort_order?: number | null
+          updated_at?: string
+          videos_per_day?: number
+        }
+        Update: {
+          created_at?: string
+          earning_per_video?: number
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          monthly_earning?: number
+          name?: string
+          price?: number
+          sort_order?: number | null
+          updated_at?: string
+          videos_per_day?: number
         }
         Relationships: []
       }

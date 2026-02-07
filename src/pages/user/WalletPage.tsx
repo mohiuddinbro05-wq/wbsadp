@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Wallet, TrendingUp, Video, ArrowDownToLine, ArrowUpFromLine, Gift, History, User } from "lucide-react";
@@ -12,10 +12,17 @@ export default function WalletPage() {
   const [searchParams] = useSearchParams();
   const { profile, loading } = useProfile();
   
-  const [depositOpen, setDepositOpen] = useState(searchParams.get('tab') === 'deposit');
+  const [depositOpen, setDepositOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const balance = profile?.balance || 0;
+
+  // Open deposit dialog if tab=deposit in URL
+  useEffect(() => {
+    if (searchParams.get('tab') === 'deposit') {
+      setDepositOpen(true);
+    }
+  }, [searchParams]);
 
   const quickActions = [
     { icon: ArrowDownToLine, label: "Deposit", color: "bg-primary/10 text-primary", onClick: () => setDepositOpen(true) },
@@ -45,7 +52,7 @@ export default function WalletPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm opacity-90 mb-1">Available Balance</p>
+                <p className="text-sm opacity-90 mb-1">মোট ব্যালেন্স</p>
                 <p className="text-4xl font-bold">৳{loading ? "..." : balance}</p>
               </div>
               <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center">
@@ -63,7 +70,7 @@ export default function WalletPage() {
                 <TrendingUp className="w-5 h-5 text-primary" />
               </div>
               <p className="text-2xl font-bold">৳{balance}</p>
-              <p className="text-sm text-muted-foreground">Total Earned</p>
+              <p className="text-sm text-muted-foreground">মোট আয়</p>
             </CardContent>
           </Card>
           <Card>
@@ -72,7 +79,7 @@ export default function WalletPage() {
                 <Video className="w-5 h-5 text-blue-500" />
               </div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-sm text-muted-foreground">Videos Watched</p>
+              <p className="text-sm text-muted-foreground">দেখা ভিডিও</p>
             </CardContent>
           </Card>
         </div>
@@ -80,7 +87,7 @@ export default function WalletPage() {
         {/* Quick Actions */}
         <Card>
           <CardContent className="p-4">
-            <h3 className="font-semibold mb-4">Quick Actions</h3>
+            <h3 className="font-semibold mb-4">দ্রুত অ্যাকশন</h3>
             <div className="grid grid-cols-3 gap-4">
               {quickActions.slice(0, 3).map((action) => (
                 action.path ? (
@@ -130,11 +137,11 @@ export default function WalletPage() {
         <div className="grid grid-cols-2 gap-3">
           <Button onClick={() => setDepositOpen(true)} className="h-12" size="lg">
             <ArrowDownToLine className="w-5 h-5 mr-2" />
-            Deposit
+            ডিপোজিট
           </Button>
           <Button onClick={() => setWithdrawOpen(true)} variant="outline" className="h-12" size="lg">
             <ArrowUpFromLine className="w-5 h-5 mr-2" />
-            Withdraw
+            উইথড্র
           </Button>
         </div>
       </main>
