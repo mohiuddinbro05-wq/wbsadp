@@ -51,9 +51,11 @@ export type Database = {
         Row: {
           balance: number | null
           created_at: string
+          current_plan_id: string | null
           full_name: string
           id: string
           phone: string | null
+          plan_purchased_at: string | null
           referral_code: string | null
           referred_by: string | null
           updated_at: string
@@ -62,9 +64,11 @@ export type Database = {
         Insert: {
           balance?: number | null
           created_at?: string
+          current_plan_id?: string | null
           full_name: string
           id?: string
           phone?: string | null
+          plan_purchased_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
           updated_at?: string
@@ -73,15 +77,25 @@ export type Database = {
         Update: {
           balance?: number | null
           created_at?: string
+          current_plan_id?: string | null
           full_name?: string
           id?: string
           phone?: string | null
+          plan_purchased_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_current_plan_id_fkey"
+            columns: ["current_plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_plans: {
         Row: {
@@ -122,6 +136,72 @@ export type Database = {
           sort_order?: number | null
           updated_at?: string
           videos_per_day?: number
+        }
+        Relationships: []
+      }
+      video_watch_history: {
+        Row: {
+          created_at: string
+          id: string
+          reward_amount: number
+          user_id: string
+          video_id: string
+          watched_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reward_amount?: number
+          user_id: string
+          video_id: string
+          watched_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reward_amount?: number
+          user_id?: string
+          video_id?: string
+          watched_at?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          created_at: string
+          duration: string | null
+          id: string
+          is_active: boolean | null
+          reward: number
+          sort_order: number | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: string | null
+          id?: string
+          is_active?: boolean | null
+          reward?: number
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          duration?: string | null
+          id?: string
+          is_active?: boolean | null
+          reward?: number
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          youtube_url?: string
         }
         Relationships: []
       }
