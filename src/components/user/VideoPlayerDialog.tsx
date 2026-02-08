@@ -7,19 +7,31 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Play, Pause, CheckCircle, Clock } from "lucide-react";
+import { CheckCircle, Clock } from "lucide-react";
 
 interface VideoPlayerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   video: {
-    id: number;
+    id: string;
     title: string;
     duration: string;
     reward: number;
     videoUrl?: string;
   };
-  onComplete: (videoId: number, reward: number) => void;
+  onComplete: (videoId: string, reward: number) => void;
+}
+
+// Extract YouTube video ID from URL
+function getYouTubeVideoId(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&\n?#]+)/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
 }
 
 export default function VideoPlayerDialog({
@@ -28,31 +40,33 @@ export default function VideoPlayerDialog({
   video,
   onComplete,
 }: VideoPlayerDialogProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30); // 30 seconds to watch
+  const [started, setStarted] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const videoId = video.videoUrl ? getYouTubeVideoId(video.videoUrl) : null;
 
   useEffect(() => {
     if (open) {
       setProgress(0);
       setCompleted(false);
       setTimeLeft(30);
-      setIsPlaying(false);
+      setStarted(false);
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [open]);
 
+  // Start countdown when video starts playing
   useEffect(() => {
-    if (isPlaying && !completed) {
+    if (started && !completed) {
       intervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             setCompleted(true);
-            setIsPlaying(false);
             if (intervalRef.current) clearInterval(intervalRef.current);
             return 0;
           }
@@ -60,20 +74,21 @@ export default function VideoPlayerDialog({
         });
         setProgress((prev) => Math.min(prev + 100 / 30, 100));
       }, 1000);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
     }
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, completed]);
+  }, [started, completed]);
 
-  const handlePlayPause = () => {
-    if (!completed) {
-      setIsPlaying(!isPlaying);
+  // Auto-start when dialog opens
+  useEffect(() => {
+    if (open && videoId) {
+      // Give iframe time to load
+      const timer = setTimeout(() => setStarted(true), 1000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [open, videoId]);
 
   const handleClaim = () => {
     onComplete(video.id, video.reward);
@@ -82,32 +97,36 @@ export default function VideoPlayerDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
+        <DialogHeader className="p-4 pb-0">
           <DialogTitle className="text-base truncate pr-8">{video.title}</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Video Placeholder */}
-          <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5" />
-            
-            {completed ? (
-              <div className="text-center z-10">
-                <CheckCircle className="w-16 h-16 text-primary mx-auto mb-2" />
-                <p className="font-semibold text-primary">ভিডিও সম্পন্ন!</p>
-              </div>
-            ) : (
-              <button
-                onClick={handlePlayPause}
-                className="z-10 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
-              >
-                {isPlaying ? (
-                  <Pause className="w-8 h-8" />
-                ) : (
-                  <Play className="w-8 h-8 ml-1" />
+        <div className="space-y-4 p-4 pt-2">
+          {/* YouTube Video Embed */}
+          <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+            {videoId ? (
+              <>
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+                  title={video.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                />
+                {completed && (
+                  <div className="absolute inset-0 bg-background/90 flex items-center justify-center z-10">
+                    <div className="text-center">
+                      <CheckCircle className="w-16 h-16 text-primary mx-auto mb-2" />
+                      <p className="font-semibold text-primary">ভিডিও সম্পন্ন!</p>
+                    </div>
+                  </div>
                 )}
-              </button>
+              </>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="text-muted-foreground">ভিডিও লোড হচ্ছে...</p>
+              </div>
             )}
           </div>
 
@@ -124,9 +143,9 @@ export default function VideoPlayerDialog({
           </div>
 
           {/* Instructions */}
-          {!completed && !isPlaying && (
+          {!completed && (
             <p className="text-xs text-muted-foreground text-center">
-              ভিডিও দেখতে প্লে বাটনে ক্লিক করুন। পুরো ভিডিও দেখলে টাকা পাবেন।
+              ৩০ সেকেন্ড ভিডিও দেখুন, তারপর টাকা নিতে পারবেন
             </p>
           )}
 
