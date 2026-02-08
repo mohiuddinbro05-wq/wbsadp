@@ -191,19 +191,19 @@ export default function UserDashboard() {
                  </CardContent>
                </Card>
              </Link>
-             <div onClick={() => setDepositOpen(true)}>
-               <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
-                 <CardContent className="p-4 flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-                     <ArrowUpRight className="w-5 h-5 text-orange-500" />
-                   </div>
-                   <div className="min-w-0">
-                     <p className="font-medium text-sm truncate">ডিপোজিট</p>
-                     <p className="text-xs text-muted-foreground truncate">টাকা যোগ করুন</p>
-                   </div>
-                 </CardContent>
-               </Card>
-             </div>
+              <Link to="/wallet">
+                <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                      <ArrowUpRight className="w-5 h-5 text-orange-500" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">ডিপোজিট</p>
+                      <p className="text-xs text-muted-foreground truncate">টাকা যোগ করুন</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
            </div>
          </div>
 
